@@ -1,0 +1,101 @@
+<div class="rounded-3xl p-1">
+  <!-- 🔍 CABECERA CON FILTROS -->
+  <div
+    class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8"
+  >
+    <!-- Título y estadísticas -->
+    <div class="flex items-center gap-4">
+      <!-- Badge contador -->
+      <div class="text-center" *ngIf="enableViewToggle">
+        <app-slide (viewEmitter)="viewMode = $event"></app-slide>
+      </div>
+    </div>
+
+    <!-- Barra de búsqueda y filtros -->
+    <app-filter-user
+      *ngIf="enableSearch || enableFilter"
+      [items]="filterOptions.length > 0 ? filterOptions : statusFilterLabel"
+      [searchSee]="searchSee || enableSearch"
+      (searchChange)="filterChange($event)"
+    ></app-filter-user>
+  </div>
+
+  <!-- 🎯 BARRA DE ACCIONES RÁPIDAS -->
+  <div
+    class="flex flex-wrap items-center justify-between gap-4 mb-8 p-4 rounded-2xl"
+    *ngIf="enableCheckbox && actions.length > 0"
+  >
+    <!-- Contador seleccionados -->
+    <div class="flex items-center gap-3">
+      <div
+        class="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-400 rounded-lg flex items-center justify-center"
+      >
+        <span class="material-symbols-rounded text-white text-base"
+          >checklist</span
+        >
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Seleccionados</p>
+        <p class="text-lg font-bold text-gray-800">
+          {{ selectedItems.length }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Botones de acciones dinámicas -->
+    <div class="flex flex-wrap gap-3">
+      <button
+        *ngFor="let action of actions.filter(a => a.bulkAction)"
+        class="px-3 py-2 border border-gray-100 rounded-xl flex items-center gap-2 text-sm font-medium shadow disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow cursor-pointer transition-all duration-300 hover:shadow-md"
+        [ngClass]="'text-' + (action.color || 'gray-500')"
+        [disabled]="!selectedItems.length"
+        (click)="triggerAction(action.name, selectedItems); $event.stopPropagation()"
+      >
+        <span class="material-symbols-rounded text-base">{{ action.icon }}</span>
+        {{ action.label || action.name }}
+      </button>
+    </div>
+  </div>
+  <!-- 🔍 CABECERA CON FILTROS -->
+  <div
+    class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8"
+  >
+    <!-- Título y estadísticas -->
+    <div class="flex items-center gap-4">
+      <!-- Badge contador -->
+      <div class="text-center">
+        <app-slide (viewEmitter)="viewMode = $event"></app-slide>
+      </div>
+    </div>
+
+    <!-- Barra de búsqueda y filtros -->
+    <app-filter-user
+      [items]="statusFilterLabel"
+      [searchSee]="searchSee"
+      (searchChange)="filterChange($event)"
+    ></app-filter-user>
+  </div>
+
+  <!-- 🎯 BARRA DE ACCIONES RÁPIDAS -->
+  <div
+    class="flex flex-wrap items-center justify-between gap-4 mb-8 p-4 rounded-2xl"
+  >
+    <!-- Contador seleccionados -->
+    <div class="flex items-center gap-3">
+      <div
+        class="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-400 rounded-lg flex items-center justify-center"
+      >
+        <span class="material-symbols-rounded text-white text-base"
+          >checklist</span
+        >
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Seleccionados</p>
+        <p class="text-lg font-bold text-gray-800">
+          {{ selectedItems.length }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+

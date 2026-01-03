@@ -1,0 +1,337 @@
+<form [formGroup]="dynamicGroup">
+  <div
+    class="grid gap-4 grid-cols-1 md:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]"
+    [style.--cols]="columns"
+  >
+    <ng-container *ngFor="let field of formData.data">
+      <!-- Input text/email/number -->
+      <div
+        *ngIf="
+          (field.type === 'text' ||
+            field.type === 'email' ||
+            field.type === 'number') &&
+          !field.hidden
+        "
+        class="form-group"
+        [ngClass]="{ 'full-width': field.grid }"
+      >
+        <div class="input-container">
+          <input
+            class="input-field"
+            [formControlName]="field.name || ''"
+            [type]="field.type "
+            [disabled]="field.disabled || false"
+          />
+          <label class="input-label" [attr.for]="field.name"
+            >{{ field.label }}{{ field.required ? "*" : "" }}</label
+          >
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          field.type === 'direction'  &&
+          !field.hidden
+        "
+        class="form-group"
+        [ngClass]="{ 'full-width': field.grid }"
+      >
+        <div class="input-container">
+          <input
+            class="input-field"
+            #direccionInput
+            [formControlName]="field.name || ''"
+            [type]="field.type "
+            [disabled]="field.disabled || false"
+          />
+          <label class="input-label" [attr.for]="field.name"
+            >{{ field.label }}{{ field.required ? "*" : "" }}</label
+          >
+        </div>
+      </div>
+
+      <!-- Textarea -->
+      <div
+        *ngIf="field.type === 'textarea' && !field.hidden"
+        class="form-group"
+        [style.gridColumn]="field.grid ? 'span ' + columns : 'auto'"
+      >
+        <div class="input-container">
+          <textarea
+            class="input-field"
+            [formControlName]="field.name || ''"
+            rows="3"
+            [disabled]="field.disabled || false"
+          ></textarea>
+          <label class="input-label">
+            {{ field.label }}{{ field.required ? "*" : "" }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Select -->
+      <div
+        *ngIf="field.type === 'select' && !field.hidden"
+        class="form-group"
+        [ngClass]="{ 'full-width': field.grid }"
+      >
+        <div class="input-container">
+          <select
+            class="input-field"
+            [formControlName]="field.name || ''"
+            [disabled]="field.disabled || false"
+            [required]="field.required || false"
+          >
+            <option value="" disabled selected></option>
+            <option *ngFor="let opt of field.option" [value]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+
+          <label class="input-label">
+            {{ field.label }}{{ field.required ? "*" : "" }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Radio -->
+      <div *ngIf="field.type === 'radio' && !field.hidden" class="form-group">
+        <label *ngFor="let opt of field.option">
+          <input
+            type="radio"
+            [formControlName]="field.name || ''"
+            [value]="opt.value"
+            [disabled]="field.disabled || false"
+          />
+          {{ opt.label }}
+        </label>
+      </div>
+
+      <!-- Checkbox -->
+      <!-- Grupo de Checkboxes -->
+      <div
+  *ngIf="field.type === 'checkbox-group'"
+  class="form-group mb-4"
+  [formGroupName]="field.name!"
+>
+  <div class="flex flex-col gap-2 bg-white p-3 rounded-lg">
+    <div
+      *ngFor="let option of field.option"
+      class="flex items-center gap-3 rounded-lg transition"
+    >
+      <input
+        type="checkbox"
+        [id]="field.name + '_' + option.name"
+        [formControlName]="option.name"
+        class="custom-checkbox"
+      />
+
+      <label
+        class="text-black text-sm cursor-pointer select-none"
+        [for]="field.name + '_' + option.name"
+      >
+        {{ option.label }}
+      </label>
+    </div>
+  </div>
+</div>
+
+
+      <!-- Date -->
+      <div *ngIf="field.type === 'date' && !field.hidden" class="form-group">
+        <input
+          class="input-field"
+          type="date"
+          [formControlName]="field.name || ''"
+          [disabled]="field.disabled || false"
+        />
+      </div>
+      <!-- Slider -->
+
+      <div
+        *ngIf="field.type === 'slide' && !field.hidden"
+        class="form-group"
+        [ngClass]="{ 'full-width': field.grid }"
+      >
+        <label class="text-black text-sm cursor-pointer select-none">
+          {{ field.label }}
+        </label>
+        <div class="relative h-8 flex items-center">
+          <!-- Fondo gris -->
+          <div
+            class="absolute left-0 right-0 h-2 bg-gray-200 rounded-full"
+          ></div>
+
+          <!-- Progreso naranja -->
+          <div
+            class="absolute left-0 h-2 bg-orange-500 rounded-full"
+            [style.width]="
+              ((dynamicGroup.get(field.name || '')?.value || 0) / 300) * 100 +
+              '%'
+            "
+          ></div>
+
+          <!-- Slider -->
+          <input
+            type="range"
+            [formControlName]="field.name || ''"
+            [min]="0"
+            [max]="300"
+            [step]="5"
+            class="relative z-10 w-full h-2 opacity-0 cursor-pointer"
+            [disabled]="field.disabled || false"
+          />
+
+          <!-- Thumb visible -->
+          <div
+            class="absolute top-1/2 w-6 h-6 bg-orange-500 rounded-full border-3 border-white shadow-lg -translate-y-1/2 cursor-pointer"
+            [style.left]="
+              ((dynamicGroup.get(field.name || '')?.value || 0) / 300) * 100 +
+              '%'
+            "
+            [style.transform]="'translate(-50%, -50%)'"
+          ></div>
+        </div>
+
+        <!-- Marcas -->
+        <div class="flex justify-between mt-2 text-xs text-gray-500">
+          <span>{{ field.min || 0 }}</span>
+          <span>{{ dynamicGroup.value[field.name!] }} km</span>
+          <span>{{ ">" + field.max }}</span>
+        </div>
+      </div>
+
+      <!-- Static Labels -->
+      <div
+        *ngIf="field.type!.startsWith('label') && !field.hidden"
+        [style.gridColumn]="'span ' + columns"
+      >
+        <h3 class="text-md font-semibold flex items-center gap-2 text-gray-800">
+          <span class="material-symbols-rounded text-orange-500">{{
+            field.icon
+          }}</span>
+          {{ field.label }}
+        </h3>
+      </div>
+
+      <!-- Button -->
+      <div
+        *ngIf="field.type === 'button-submit' && !field.hidden"
+        class="form-group"
+      >
+        <button
+          type="submit"
+          [disabled]="dynamicGroup.invalid"
+          class="px-3 py-1.5 rounded-md text-sm pointer"
+          (click)="onSubmit()"
+          [ngClass]="
+            dynamicGroup.invalid
+              ? 'bg-orange-300 '
+              : 'bg-orange-500 hover:bg-[#FF8B66] text-white cursor-pointer'
+          "
+        >
+          <svg
+            *ngIf="spinner"
+            class="animate-spin h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+          <span *ngIf="!spinner">{{ field.label }}</span>
+        </button>
+      </div>
+
+      <div
+        *ngIf="field.type === 'button-clear' && !field.hidden"
+        class="form-group"
+      >
+        <button
+          type="submit"
+          class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-100 cursor-pointer"
+          (click)="onClear()"
+        >
+          <span *ngIf="!spinner">{{ field.label }}</span>
+        </button>
+      </div>
+      <!-- Alert -->
+      <div
+        *ngIf="field.type === 'alert' && !field.hidden"
+        class="form-group alert-container"
+      >
+        <div class="alert">
+          <small>{{ field.label }}</small>
+        </div>
+      </div>
+      <!-- Alert -->
+      <div
+        *ngIf="field.type === 'emty' && !field.hidden"
+        class="form-group alert-container"
+      >
+        <div></div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Acciones -->
+  <div
+    class="form-actions"
+    [style.gridColumn]="'span ' + columns"
+    *ngIf="butoms"
+  >
+    <button
+      type="button"
+      class="px-3 py-1.5 rounded-md text-sm pointer bg-gray-200 hover:bg-gray-100 cursor-pointer"
+      (click)="onCancel()"
+    >
+      Limpiar
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="dynamicGroup.invalid"
+      class="px-3 py-1.5 rounded-md text-sm pointer"
+      [ngClass]="
+        dynamicGroup.invalid
+          ? 'bg-gray-200 '
+          : 'bg-[#ff7043] hover:bg-[#FF8B66] text-white cursor-pointer'
+      "
+    >
+      <svg
+        *ngIf="spinner"
+        class="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+        ></path>
+      </svg>
+      <span *ngIf="!spinner">Aceptar</span>
+    </button>
+  </div>
+</form>

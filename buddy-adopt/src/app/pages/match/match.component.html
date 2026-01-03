@@ -1,0 +1,621 @@
+<app-preload [spinner]="spinner"></app-preload>
+
+<div class="min-h-screen p-4 md:p-6 relative overflow-hidden" *ngIf="!spinner">
+  <!-- Fondo decorativo acorde al navbar -->
+  <div class="absolute inset-0"></div>
+
+  <!-- Header mejorado -->
+  <header class="relative z-10 mb-6 md:mb-8">
+    <div class="flex items-center justify-between">
+      <!-- Logo y título con diseño similar al navbar -->
+      <div class="flex items-center gap-3">
+        <a routerLink="/index" class="flex items-center group">
+          <div class="relative">
+            <div
+              class="absolute -inset-1 rounded-lg bg-gradient-to-r from-orange-500/20 to-amber-500/20 blur opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+            ></div>
+            <div
+              class="relative w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-gray-900 via-[#1a2226] to-gray-900 flex items-center justify-center shadow-lg border border-white/10"
+            >
+              <svg
+                class="w-6 h-6 text-amber-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        </a>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+            Encuentra tu Match
+          </h1>
+          <p class="text-xs md:text-sm text-gray-500 hidden sm:block">
+            Desliza para descubrir animales cerca de ti
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats y filtros - Diseño consistente -->
+      <div class="flex items-center gap-2 md:gap-3">
+        <!-- Botón filtros -->
+        <button
+          (click)="setTypeDialog('filter')"
+          class="group relative focus:outline-none"
+        >
+          <div
+            class="absolute -inset-1 bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+          <div
+            class="relative w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg border border-white/20 flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            [class.bg-gradient-to-r]="typeDialog === 'filter'"
+            [class.from-orange-50]="typeDialog === 'filter'"
+            [class.to-amber-50]="typeDialog === 'filter'"
+            [class.border-orange-300]="typeDialog === 'filter'"
+          >
+            <svg
+              class="w-5 h-5 transition-all duration-300"
+              [class.text-orange-600]="typeDialog === 'filter'"
+              [class.text-gray-700]="typeDialog !== 'filter'"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+              />
+            </svg>
+          </div>
+        </button>
+
+        <!-- Botón preferencias -->
+        <button
+          (click)="setTypeDialog('preferent')"
+          class="group relative focus:outline-none"
+        >
+          <div
+            class="absolute -inset-1 bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+          <div
+            class="relative w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg border border-white/20 flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            [class.bg-gradient-to-r]="typeDialog === 'preferent'"
+            [class.from-orange-50]="typeDialog === 'preferent'"
+            [class.to-amber-50]="typeDialog === 'preferent'"
+            [class.border-orange-300]="typeDialog === 'preferent'"
+          >
+            <svg
+              class="w-5 h-5 transition-all duration-300"
+              [class.text-orange-600]="typeDialog === 'preferent'"
+              [class.text-gray-700]="typeDialog !== 'preferent'"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <div *ngIf="currentAnimal">
+    <!-- Main Card Container -->
+    <main class="relative z-10 max-w-sm mx-auto md:max-w-md">
+      <!-- Match Perfecto Badge - Estilo similar al navbar -->
+      <div
+        *ngIf="getMatchPercentage(currentAnimal) > 85"
+        class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20"
+      >
+        <div
+          class="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-2 rounded-full shadow-xl border border-white/20 backdrop-blur-sm"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span class="text-sm font-bold">¡MATCH PERFECTO!</span>
+          <span class="text-xs bg-white/30 px-2 py-0.5 rounded-full"
+            >{{ getMatchPercentage(currentAnimal) }}%</span
+          >
+        </div>
+      </div>
+
+      <!-- Card Principal - Estilo consistente -->
+      <div
+        class="relative w-full aspect-[3/4] bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-white"
+      >
+        <!-- Imagen con controles -->
+        <div
+          class="relative w-full h-full"
+          (swipeleft)="onSwipe('left')"
+          (swiperight)="onSwipe('right')"
+        >
+          <!-- Imagen -->
+          <img
+            [src]="currentAnimal?.images?.[currentImageIndex] || 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&h=1067&fit=crop'"
+            alt="{{ currentAnimal?.name }}"
+            class="w-full h-full object-cover transition-all duration-500"
+            [class.opacity-100]="!imageLoading"
+            [class.opacity-0]="imageLoading"
+            (load)="imageLoading = false"
+          />
+
+          <!-- Loading -->
+          <div
+            *ngIf="imageLoading"
+            class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200"
+          >
+            <div class="flex flex-col items-center">
+              <div
+                class="w-14 h-14 border-4 border-t-transparent border-orange-500 rounded-full animate-spin mb-4"
+              ></div>
+              <p class="text-gray-500 text-sm">Cargando compañero...</p>
+            </div>
+          </div>
+
+          <!-- Overlay superior -->
+          <div class="absolute top-0 left-0 right-0 p-4">
+            <!-- Urgencia badge - Estilo similar -->
+            <div
+              *ngIf="currentAnimal"
+              class="inline-flex items-center gap-1.5 bg-gradient-to-r from-red-500 to-rose-500 text-white px-3 py-1.5 rounded-full shadow-lg border border-white/20"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.986-.833-2.756 0L4.342 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+              <span class="text-xs font-bold">ADOPCIÓN URGENTE</span>
+            </div>
+          </div>
+
+          <!-- Navegación de imágenes - Estilo consistente -->
+          <button
+            *ngIf="currentAnimal?.images?.length! > 1"
+            (click)="prevImage(); $event.stopPropagation()"
+            class="absolute top-1/2 left-3 md:left-4 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20 cursor-pointer"
+          >
+            <svg
+              class="w-5 h-5 text-gray-800"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <button
+            *ngIf="currentAnimal?.images?.length! > 1"
+            (click)="nextImage(); $event.stopPropagation()"
+            class="absolute top-1/2 right-3 md:right-4 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20 cursor-pointer"
+          >
+            <svg
+              class="w-5 h-5 text-gray-800"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
+          <!-- Indicadores de imagen -->
+          <div
+            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5"
+          >
+            <div
+              *ngFor="let img of currentAnimal?.images; let i = index"
+              (click)="currentImageIndex = i; $event.stopPropagation()"
+              class="w-1.5 h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+              [class]="
+                currentImageIndex === i
+                  ? 'w-6 bg-white shadow-md border border-white/30'
+                  : 'bg-white/60 hover:bg-white/80 border border-white/20'
+              "
+            ></div>
+          </div>
+        </div>
+
+        <!-- Información del animal - Overlay mejorado -->
+        <div
+          class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/80 to-transparent p-5 md:p-6 text-white pt-12 backdrop-blur-[1px]"
+        >
+          <!-- Nombre y edad -->
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-bold mb-1">
+                {{ currentAnimal?.name || "Cargando..." }}
+              </h2>
+              <div class="flex items-center gap-3 text-sm">
+                <span class="flex items-center gap-1 bg-white/10 backdrop-blur-sm px-2 py-1 rounded-lg">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>{{ currentAnimal?.age || "?" }} años</span>
+                </span>
+                <div class="w-1 h-1 rounded-full bg-white/30"></div>
+                <span class="flex items-center gap-1 bg-white/10 backdrop-blur-sm px-2 py-1 rounded-lg">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>{{ currentAnimal?.breed || "Raza mixta" }}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Distancia - Tarjeta mejorada -->
+            <div
+              class="text-right bg-gradient-to-br from-gray-900/80 to-[#1a2226]/80 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10"
+            >
+              <div class="text-xs text-gray-300">A solo</div>
+              <div class="text-lg font-bold text-amber-400">
+                {{ currentAnimal?.distance }} km
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags - Estilo similar al navbar -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span
+              *ngIf="currentAnimal?.size"
+              class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs border border-white/20"
+            >
+              📏 {{ currentAnimal?.size }}
+            </span>
+            <span
+              *ngIf="currentAnimal?.sex"
+              class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs border border-white/20"
+            >
+              {{ currentAnimal?.sex === "Macho" ? "♂️ Macho" : "♀️ Hembra" }}
+            </span>
+            <span
+              *ngIf="currentAnimal?.sterilized"
+              class="px-3 py-1 bg-green-500/20 backdrop-blur-sm rounded-full text-xs border border-green-500/30"
+            >
+              💉 Esterilizado
+            </span>
+            <span
+              *ngIf="currentAnimal?.vaccinated"
+              class="px-3 py-1 bg-blue-500/20 backdrop-blur-sm rounded-full text-xs border border-blue-500/30"
+            >
+              🩺 Vacunado
+            </span>
+          </div>
+        </div>
+
+        <!-- Efecto de swipe -->
+        <div
+          *ngIf="swipeDirection"
+          class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
+        >
+          <div
+            class="text-7xl font-bold transform transition-all duration-300"
+            [class.opacity-100]="swipeOpacity === 1"
+            [class.opacity-0]="swipeOpacity === 0"
+            [class.scale-150]="swipeOpacity === 1"
+            [class.scale-100]="swipeOpacity === 0"
+            [class.text-green-500]="swipeDirection === 'right'"
+            [class.text-red-500]="swipeDirection === 'left'"
+          >
+            {{ swipeDirection === "right" ? "❤️" : "👎" }}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Botones de acción - Diseño mejorado -->
+    <footer class="relative z-10 mt-8 md:mt-10">
+      <div class="flex justify-center items-center gap-6 md:gap-8">
+        <!-- Botón NO -->
+        <div class="flex flex-col items-center">
+          <button
+            (click)="onSwipe('left')"
+            class="group relative focus:outline-none cursor-pointer"
+          >
+            <div
+              class="absolute -inset-3 bg-gradient-to-br from-red-500/10 to-red-400/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl border border-white/20 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 hover:-rotate-12 cursor-pointer"
+            >
+              <div
+                class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-red-500/10 to-red-400/10 flex items-center justify-center shadow-inner border border-red-200/30"
+              >
+                <svg
+                  class="w-8 h-8 md:w-10 md:h-10 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-gray-600 font-medium">No</p>
+          </button>
+        </div>
+
+        <!-- Botón SÍ -->
+        <div class="flex flex-col items-center">
+          <button
+            (click)="onSwipe('right')"
+            class="group relative focus:outline-none cursor-pointer"
+          >
+            <div
+              class="absolute -inset-3 bg-gradient-to-br from-green-500/10 to-emerald-400/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl border border-white/20 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 hover:rotate-12 cursor-pointer"
+            >
+              <div
+                class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-green-500/10 to-emerald-400/10 flex items-center justify-center shadow-inner border border-green-200/30"
+              >
+                <svg
+                  class="w-8 h-8 md:w-10 md:h-10 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-gray-600 font-medium">Sí</p>
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Estado vacío -->
+  <div
+    *ngIf="!currentAnimal"
+    class="p-4 md:p-6 flex items-center justify-center"
+  >
+    <div class="text-center max-w-md mx-auto">
+      <div
+        class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-gray-900/10 via-[#1a2226]/10 to-gray-900/10 flex items-center justify-center border border-white/10"
+      >
+        <svg
+          class="w-20 h-20 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-3">¡Vaya!</h2>
+      <p class="text-gray-600 mb-6">
+        Por el momento no hay más animales disponibles que coincidan con tus
+        filtros.
+      </p>
+
+      <!-- Sugerencia -->
+      <div class="mt-8 p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border border-orange-100">
+        <p class="text-sm text-gray-700">
+          💡 <strong>Consejo:</strong> Intenta ajustar los filtros o revisar más
+          tarde, nuevos animales llegan constantemente.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animación de MATCH - Estilo mejorado -->
+  <div
+    *ngIf="showMatchAnimation"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  >
+    <div
+      class="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
+    ></div>
+
+    <div
+      class="relative bg-gradient-to-br from-gray-900 via-[#1a2226] to-gray-900 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-white/10 text-white animate-scale-in"
+    >
+      <div class="text-center">
+        <div class="text-6xl mb-4 animate-bounce">🎉</div>
+        <h3 class="text-2xl md:text-3xl font-bold mb-2 text-amber-400">¡MATCH!</h3>
+        <p class="text-lg mb-1 text-gray-300">Has hecho match con</p>
+        <p class="text-2xl font-bold mb-6">{{ currentAnimal?.name }}</p>
+
+        <div
+          class="w-24 h-24 mx-auto mb-6 rounded-2xl border-2 border-amber-500/50 overflow-hidden shadow-lg"
+        >
+          <img
+            [src]="currentAnimal?.images?.[0]"
+            alt="{{ currentAnimal?.name }}"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button
+            (click)="showMatchAnimation = false"
+            class="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors font-medium border border-white/10 cursor-pointer"
+          >
+            Seguir buscando
+          </button>
+          <button
+            (click)="goToChat()"
+            class="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+            Enviar mensaje
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tutorial -->
+  <div
+    *ngIf="showTutorial"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+  >
+    <div class="bg-gradient-to-br from-gray-900 to-[#1a2226] rounded-2xl p-6 max-w-sm w-full border border-white/10">
+      <h3 class="text-xl font-bold text-white mb-4">¿Cómo funciona?</h3>
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 border border-red-500/30"
+          >
+            <svg
+              class="w-4 h-4 text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-white">Desliza a la izquierda</p>
+            <p class="text-sm text-gray-400">Si no te interesa este animal</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 border border-green-500/30"
+          >
+            <svg
+              class="w-4 h-4 text-green-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-white">Desliza a la derecha</p>
+            <p class="text-sm text-gray-400">Si te gusta y quieres adoptar</p>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="closeTutorial()"
+        class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white py-3 rounded-xl font-bold transition-colors cursor-pointer"
+      >
+        ¡Empezar!
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-dialog
+  *ngIf="showDialog"
+  [title]="typeDialog === 'preferent'?'Opciones de match':'Ajustes de búsqueda' "
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="handleConfirm()"
+  [width]="'600px'"
+  [maxHeight]="'80vh'"
+>
+  <app-forms-dynamic
+    [formData]="formData"
+    [columns]="2"
+    (submitForm)="setFormValue($event)"
+    (formGroupChange)="onFormGroupChange($event)"
+    [butoms]="false"
+    [spinner]="spinnerButtonm"
+    *ngIf="typeDialog === 'filter'"
+  ></app-forms-dynamic>
+  <app-forms-dynamic
+    [formData]="formData"
+    [columns]="1"
+    (submitForm)="setFormValue($event)"
+    (formGroupChange)="onFormGroupChange($event)"
+    [butoms]="false"
+    [spinner]="spinnerButtonm"
+    *ngIf="typeDialog === 'preferent'"
+  ></app-forms-dynamic>
+</app-dialog>

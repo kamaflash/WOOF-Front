@@ -1,0 +1,15 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+.profile-link {
+  display: inline-block; /* Asegura que el enlace envuelva al contenido */
+}
+
+.profile-img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-link:hover .profile-img {
+  transform: scale(1.2); /* Escala la imagen al pasar el ratón */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Añade una sombra */
+}

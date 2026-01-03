@@ -1,0 +1,186 @@
+<div
+  *ngIf="spinner"
+  class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10"
+>
+  <div
+    class="w-12 h-12 border-4 border-t-transparent border-[#ff7043] rounded-full animate-spin"
+  ></div>
+</div>
+
+
+<body
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#343c41] via-[#4E585E] to-[#ff8904] relative overflow-hidden" *ngIf="!spinner"
+>
+  <!-- Fondo animado de burbujas -->
+  <div class="absolute inset-0 -z-10">
+    <div
+      class="absolute w-72 h-72 bg-[#4E585E] rounded-full blur-3xl opacity-40 top-10 left-10 animate-pulse"
+    ></div>
+    <div
+      class="absolute w-96 h-96 bg-[#4E585E] rounded-full blur-3xl opacity-40 bottom-20 right-10 animate-ping"
+    ></div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div
+    class="flex w-full max-w-5xl rounded-2xl overflow-hidden shadow-xl bg-white backdrop-blur-md"
+  >
+    <!-- Imagen lateral -->
+    <div
+      class="flex-1 hidden md:flex w-1/2 bg-cover bg-center items-center justify-center p-1"
+      style="
+        background-image: url('https://res.cloudinary.com/dfnywietn/image/upload/v1764594067/popjvhyn6yqeso8drtkw.png');
+      "
+    ></div>
+
+    <!-- Formulario de registro -->
+    <div class="flex-2 flex items-start justify-center p-8 pt-12">
+      <div class="w-full max-w-lg space-y-6">
+        <img
+          src="https://res.cloudinary.com/dfnywietn/image/upload/v1764593368/j8jsmak3mlxqcdoxppql.png"
+          alt=""
+        />
+
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Ya casi está!</h2>
+          <p class="text-gray-600">
+            Crea tu contraseña para activar tu cuenta en
+            <span class="font-semibold text-orange-500">WOOF</span>
+          </p>
+        </div>
+        <form
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit()"
+          class="space-y-4"
+        >
+          <!-- Tipo de cuenta -->
+
+          <!-- Username -->
+          <div class="relative flex items-center">
+            <input
+              type="password"
+              formControlName="password"
+              placeholder=" "
+              class="peer w-full bg-white px-3 py-2 pr-10 border rounded-lg text-sm shadow-sm transition-all duration-300 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-300 border-orange-400"
+              [ngClass]="{
+                'border-green-500 ring-green-300':
+                  registerForm.get('password')?.valid &&
+                  registerForm.get('password')?.dirty,
+                'border-red-500 ring-red-300':
+                  registerForm.get('password')?.invalid &&
+                  registerForm.get('password')?.dirty
+              }"
+            />
+            <label
+              class="absolute left-3 -top-2 text-gray-400 text-xs bg-white px-1 transition-all duration-300 peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-orange-500 pointer-events-none"
+              >Contraseña</label
+            >
+            <span
+              *ngIf="
+                registerForm.get('password')?.valid &&
+                registerForm.get('password')?.dirty
+              "
+              class="absolute right-3 text-green-500 material-symbols-rounded text-sm"
+              >check</span
+            >
+            <span
+              *ngIf="
+                registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.dirty
+              "
+              class="absolute right-3 text-red-500 material-symbols-rounded text-sm"
+              >close</span
+            >
+          </div>
+
+          <div class="relative flex items-center">
+            <input
+              type="password"
+              formControlName="confirm"
+              placeholder=" "
+              class="peer w-full bg-white px-3 py-2 pr-10 border rounded-lg text-sm shadow-sm transition-all duration-300 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-300 border-orange-400"
+              [ngClass]="{
+                'border-green-500 ring-green-300':
+                  registerForm.get('confirm')?.valid &&
+                  registerForm.get('confirm')?.dirty,
+                'border-red-500 ring-red-300':
+                  registerForm.get('confirm')?.invalid &&
+                  registerForm.get('confirm')?.dirty
+              }"
+            />
+            <label
+              class="absolute left-3 -top-2 text-gray-400 text-xs bg-white px-1 transition-all duration-300 peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-orange-500 pointer-events-none"
+              >Confirmar contraseña</label
+            >
+            <span
+              *ngIf="
+                registerForm.get('confirm')?.valid &&
+                registerForm.get('confirm')?.dirty
+              "
+              class="absolute right-3 text-green-500 material-symbols-rounded text-sm"
+              >check</span
+            >
+            <span
+              *ngIf="
+                registerForm.get('confirm')?.invalid &&
+                registerForm.get('confirm')?.dirty
+              "
+              class="absolute right-3 text-red-500 material-symbols-rounded text-sm"
+              >close</span
+            >
+          </div>
+
+          <!-- Botón registrar -->
+          <button
+            type="submit"
+            [disabled]="
+              this.registerForm.invalid ||
+              this.registerForm.value.password !==
+                this.registerForm.value.confirm ||
+              spinner
+            "
+            class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-300 disabled:opacity-50 text-white font-semibold px-3 py-2 rounded-lg text-sm transition shadow-md cursor-pointer"
+          >
+            <svg
+              *ngIf="spinner"
+              class="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+            <span *ngIf="!spinner">Registrarme</span>
+          </button>
+        </form>
+
+        <p class="text-center text-gray-600 text-sm">
+          ¿Ya tienes cuenta?
+          <a
+            href="/login"
+            class="text-[#ff7043] font-semibold hover:text-[#FF8B66]"
+            >Entra</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
+<app-snackback
+  [message]="snackbarState.message"
+  type="info"
+  [show]="snackbarState.show"
+></app-snackback>

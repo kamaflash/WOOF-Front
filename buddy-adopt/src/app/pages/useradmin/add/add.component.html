@@ -1,0 +1,145 @@
+<app-preload [spinner]="spinner"></app-preload>
+
+<div class="p-6">
+
+  <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
+
+    <!-- ================== COLUMNA IZQUIERDA ================== -->
+    <div class="flex flex-col gap-8">
+
+      <!-- ░░░░░░ IMÁGENES ACTUALES ░░░░░░ -->
+      <div *ngIf="animalId" class="bg-white shadow-md rounded-2xl p-5 border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Imágenes actuales</h3>
+
+        <!-- Imagen principal -->
+        <div class="w-full h-64 rounded-xl overflow-hidden mb-4">
+          <img
+            [src]="imgPet"
+            alt="preview"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <!-- Miniaturas -->
+        <div class="flex flex-wrap gap-3">
+          <div
+            *ngFor="let mascota of animalInput.images; let i = index"
+            class="relative group w-20 h-20 cursor-pointer"
+          >
+            <img
+              [src]="mascota"
+              (click)="imgPet = mascota"
+              class="w-full h-full object-cover rounded-lg border-2 transition-all"
+              [class.border-orange-500]="imgPet === mascota"
+              [class.border-transparent]="imgPet !== mascota"
+            />
+
+            <button
+              type="button"
+              (click)="removeImage(i)"
+              class="absolute top-1 right-1 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░░░░ DATOS DEL ANIMAL (FORMULARIO) ░░░░░░ -->
+      <div class="bg-white shadow-md rounded-2xl p-5 border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Datos del animal</h3>
+
+        <app-forms-dynamic
+          [formData]="formData"
+          [columns]="3"
+          (submitForm)="setFormValue($event)"
+          (formGroupChange)="onFormGroupChange($event)"
+          [butoms]="false"
+          [spinner]="spinnerButtonm"
+          [next]="next"
+        ></app-forms-dynamic>
+      </div>
+
+      <!-- ░░░░░░ AÑADIR NUEVAS IMÁGENES ░░░░░░ -->
+      <div class="bg-white shadow-md rounded-2xl p-5 border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Añadir imágenes</h3>
+
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onImagesSelected($event)"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400"
+        />
+
+        <!-- Previews nuevas -->
+        <div *ngIf="previewImages.length" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div *ngFor="let img of previewImages; let i = index" class="relative group rounded-lg overflow-hidden">
+            <img [src]="img" class="w-full h-36 object-cover" />
+            <button
+              type="button"
+              (click)="removeImage(i)"
+              class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================== COLUMNA DERECHA ================== -->
+    <div class="flex flex-col gap-8">
+
+      <!-- ░░░░░░ PREGUNTAS DE SOLICITUD ░░░░░░ -->
+      <div class="bg-white shadow-md rounded-2xl p-5 border border-gray-200">
+
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+          Selección de preguntas para la solicitud
+        </h3>
+
+        <!-- Seleccionar todos -->
+        <div class="flex items-center mb-4">
+          <input
+            type="checkbox"
+            [checked]="areAllSelected()"
+            (change)="toggleAll($event)"
+                    class="custom-checkbox"
+
+          />
+          <span class="ml-2 text-gray-700">
+            {{ areAllSelected() ? "Deseleccionar todos" : "Seleccionar todos" }}
+          </span>
+        </div>
+
+        <!-- Listado de preguntas -->
+        <div class="grid gap-3">
+
+          <label
+            *ngFor="let question of availableQuestions; let i = index"
+            class="flex gap-3 p-3 rounded-xl border border-gray-300 hover:bg-gray-100 cursor-pointer transition"
+          >
+            <input
+              type="checkbox"
+              [(ngModel)]="question.selected"
+              name="question_{{ i }}"
+
+        class="custom-checkbox"
+        (change)="onQuestionChange()"
+            />
+
+            <span class="text-gray-700 text-sm leading-tight">
+              {{ question.text }}
+            </span>
+          </label>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,66 @@
+<div
+  *ngIf="spinner"
+  class="fixed inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-xl z-50"
+>
+  <!-- Spinner de puntos con efecto de onda -->
+  <div class="relative flex space-x-3 mb-6">
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-20 h-20 rounded-full border-2 border-orange-200/50 animate-ping opacity-30"></div>
+    </div>
+
+    <div
+      class="relative w-4 h-4 rounded-full bg-gradient-to-br from-[#ff7043] to-orange-500 shadow-lg animate-bounce"
+      style="animation-delay: 0s"
+    ></div>
+    <div
+      class="relative w-4 h-4 rounded-full bg-gradient-to-br from-[#ff7043] to-orange-500 shadow-lg animate-bounce"
+      style="animation-delay: 0.1s"
+    ></div>
+    <div
+      class="relative w-4 h-4 rounded-full bg-gradient-to-br from-[#ff7043] to-orange-500 shadow-lg animate-bounce"
+      style="animation-delay: 0.2s"
+    ></div>
+  </div>
+
+  <!-- Texto -->
+  <!-- <p class="text-gray-700 font-medium text-sm mb-4 animate-pulse">
+    Procesando información, por favor espera...
+  </p> -->
+
+  <!-- Barra de progreso con efecto brillante -->
+  <!-- <div class="w-40 h-1 bg-gray-100 rounded-full overflow-hidden">
+    <div class="h-full bg-gradient-to-r from-[#ff7043] via-orange-400 to-amber-300 animate-shimmer relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine"></div>
+    </div>
+  </div> -->
+
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) skewX(-15deg); }
+      100% { transform: translateX(200%) skewX(-15deg); }
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-shimmer {
+      animation: shimmer 2s infinite;
+      width: 50%;
+    }
+
+    .animate-shine {
+      animation: shine 1.5s infinite;
+    }
+  </style>
+</div>

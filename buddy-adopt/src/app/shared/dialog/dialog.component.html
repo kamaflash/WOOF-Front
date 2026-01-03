@@ -1,0 +1,106 @@
+<!-- Fondo oscuro -->
+<div
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+  (click)="closeDialog()"
+>
+  <!-- Contenedor del modal -->
+  <div
+    class="bg-white rounded-2xl overflow-y-auto relative animate-fadeIn"
+    (click)="$event.stopPropagation()"
+    [ngStyle]="{
+      width: width,
+      height: height,
+      maxHeight: maxHeight
+    }"
+  >
+    <!-- HEADER FIJO -->
+    <div class="sticky top-0 z-10 bg-white px-2  flex items-center justify-between" *ngIf="buttonClosed">
+      <h2 class="text-xl"></h2>
+
+      <!-- Botón cerrar -->
+      <button
+        class="text-gray-400 hover:text-gray-600 transition cursor-pointer"
+        (click)="closeDialog()"
+        [disabled]="spinner"
+      >
+        <span class="material-symbols-rounded"> close </span>
+      </button>
+    </div>
+
+    <!-- Contenido dinámico -->
+    <div class="p-6">
+      <ng-content></ng-content>
+
+      <!-- Botones de acción -->
+      <div class="flex justify-end gap-3 mt-6" *ngIf="button">
+        <button
+        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-medium transition  cursor-pointer"
+          (click)="closeDialog()"
+          [disabled]="spinner"
+        >
+          Cancelar
+        </button>
+
+        <button
+                class="w-50 flex items-center justify-center bg-red-400 hover:bg-red-500 disabled:opacity-50 text-white font-semibold px-3 py-2 rounded-lg text-sm transition shadow-md  cursor-pointer"
+
+          (click)="rechazarDialog()"
+          *ngIf="buttonRechazo"
+        >
+          <svg
+            *ngIf="spinnerRechazo"
+            class="animate-spin h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+          <span *ngIf="!spinnerRechazo">Rechazar</span>
+        </button>
+
+        <button
+          type="submit"
+        class="w-30 flex items-center justify-center bg-orange-400 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold px-3 py-2 rounded-lg text-sm transition shadow-md  cursor-pointer"
+          [disabled]="submitDisabled"
+          (click)="confirmDialog()"
+        >
+          <svg
+            *ngIf="spinner"
+            class="animate-spin h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+          <span *ngIf="!spinner">Aceptar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

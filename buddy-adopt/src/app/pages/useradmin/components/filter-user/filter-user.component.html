@@ -1,0 +1,43 @@
+<div class="flex flex-col sm:flex-row items-center gap-4">
+  <!-- Formulario reactivo -->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="contents">
+
+    <!-- Buscador con icono -->
+    <div class="relative w-full sm:w-72" *ngIf="searchSee">
+      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <span class="material-symbols-rounded text-lg">search</span>
+      </span>
+      <input
+        type="text"
+        formControlName="searchTerm"
+        placeholder="Buscar mascota..."
+        class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all duration-300"
+      />
+    </div>
+
+    <!-- Filtro por estado -->
+    <div class="relative w-full sm:w-auto" *ngIf="filterSee">
+      <select
+        formControlName="status"
+        class="appearance-none w-full sm:w-48 pl-4 pr-10 py-2 bg-white border border-gray-200 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all duration-300 cursor-pointer"
+      >
+        <option value="" class="text-gray-500">Todos</option>
+        <option [value]="item.value" *ngFor="let item of items">
+          {{item.label}}
+        </option>
+      </select>
+      <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+        <span class="material-symbols-rounded">expand_more</span>
+      </span>
+    </div>
+
+    <!-- Botón de búsqueda (opcional) -->
+    <button
+      type="submit"
+      class="hidden"
+    >
+      Buscar
+    </button>
+
+  </form>
+</div>

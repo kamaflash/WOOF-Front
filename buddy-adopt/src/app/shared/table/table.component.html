@@ -1,0 +1,223 @@
+<div class="rounded-3xl p-1">
+  <!-- Header: View toggle + Filters -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+    <div class="flex items-center gap-4">
+      <div class="text-center" *ngIf="enableViewToggle">
+        <app-slide [viewMode]="viewMode" (viewEmitter)="viewMode = $event"></app-slide>
+      </div>
+    </div>
+
+    <app-filter-user
+  *ngIf="enableSearch || enableFilter"
+  [items]="filterOptions.length > 0 ? filterOptions : statusFilterLabel"
+  [searchSee]="searchSee || enableSearch"
+  [filterSee]=" seeFilter"
+  [defaultStatus]="filterStatus"
+  (searchChange)="filterChange($event)"
+></app-filter-user>
+
+  </div>
+
+  <!-- Bulk actions summary -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-8 p-4 rounded-2xl" *ngIf="enableCheckbox && actions.length > 0">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-400 rounded-lg flex items-center justify-center">
+        <span class="material-symbols-rounded text-white text-base">checklist</span>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Seleccionados</p>
+        <p class="text-lg font-bold text-gray-800">{{ selectedItems.length }}</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <button
+        *ngFor="let action of getBulkActions()"
+        [ngClass]="getActionButtonClass(action.color)"
+        class="px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium shadow hover:shadow-md disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        [disabled]="!selectedItems.length"
+        (click)="triggerAction(action.name, selectedItems); $event.stopPropagation()"
+      >
+        <span class="material-symbols-rounded text-base">{{ action.icon }}</span>
+        {{ action.label || action.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="overflow-hidden bg-white rounded-2xl">
+    <!-- Table view -->
+    <div *ngIf="viewMode === 'table'" class="rounded-2xl">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 text-gray-700 text-xs font-semibold uppercase tracking-wider">
+              <th class="px-6 py-4 text-left rounded-tl-2xl w-12" *ngIf="enableCheckbox">
+                <div class="flex items-center">
+                  <input type="checkbox" [checked]="areAllSelected()" (change)="toggleSelectAll($event)"
+                    class="appearance-none w-5 h-5 rounded border border-gray-600 checked:bg-orange-400 checked:border-orange-400 focus:ring-2 focus:ring-orange-400 cursor-pointer" />
+                </div>
+              </th>
+
+              <th *ngFor="let column of columns; let last = last" class="px-6 py-4 text-left" [style.width]="column.width"
+                [ngClass]="{ 'rounded-tr-2xl': last && !actions.length }">
+                <div class="flex items-center gap-2">
+                  <span *ngIf="column.icon" class="material-symbols-rounded text-base">{{ column.icon }}</span>
+                  {{ column.label }}
+                </div>
+              </th>
+
+              <th *ngIf="actions.length > 0" class="px-6 py-4 text-center rounded-tr-2xl">
+                <div class="flex items-center gap-2 justify-center">
+                  <span class="material-symbols-rounded text-base">settings</span>
+                  Acciones
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of filteredItems; let i = index" class="border-b border-gray-100 hover:bg-orange-50 cursor-pointer transition-colors"
+              (click)="onClick(item); $event.stopPropagation()">
+
+              <td class="px-6 py-4" *ngIf="enableCheckbox">
+                <input type="checkbox" [(ngModel)]="item.selected" (change)="onSelect(item)" (click)="$event.stopPropagation()"
+                  [disabled]="!isItemSelectable(item)" class="appearance-none w-4 h-4 rounded border border-gray-600 checked:bg-orange-400 cursor-pointer" />
+              </td>
+
+              <td *ngFor="let column of columns" class="px-6 py-4" [style.width]="column.width">
+                <ng-container *ngIf="!column.customTemplate">
+                  <div *ngIf="column.imageField && column.textField" class="flex items-center gap-3">
+                    <img [src]="getImageUrl(getNestedValue(item, column.imageField || column.key || ''))"
+                      [alt]="column.imageAlt || getNestedValue(item, column.textField || column.key || '')"
+                      class="w-10 h-10 rounded-xl object-cover shadow-sm" (error)="onImageError($event)" />
+                    <div>
+                      <p class="font-semibold text-gray-900">
+                        {{ column.render ? column.render(item) : (getNestedValue(item, column.textField || column.key || '') || 'Sin nombre') }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div *ngIf="!column.imageField" [ngSwitch]="column.key">
+                    <span *ngSwitchCase="'status'" class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusBadgeClass(item.status)">
+                      {{ column.render ? column.render(item) : (getNestedValue(item, column.key || '') || '') }}
+                    </span>
+                    <span *ngSwitchDefault>
+                      {{ column.render ? column.render(item) : (getNestedValue(item, column.key || '') || '') }}
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="column.customTemplate">
+                  <ng-container *ngTemplateOutlet="column.customTemplate; context: { $implicit: item }"></ng-container>
+                </ng-container>
+              </td>
+
+              <td *ngIf="actions.length > 0" class="px-6 py-4">
+                <div class="flex items-center justify-center gap-2">
+                  <ng-container *ngFor="let action of getNonBulkActions()">
+                    <button *ngIf="isActionVisible(action, item)" [disabled]="isActionDisabled(action, item)"
+                      (click)="triggerAction(action.name, item); $event.stopPropagation()"
+                      [ngClass]="getActionButtonClass(action.color)"
+                      class="px-3 py-2 rounded-xl flex items-center gap-2 text-sm font-medium shadow hover:shadow-md disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                      <span class="material-symbols-rounded text-base">{{ action.icon }}</span>
+                    </button>
+                  </ng-container>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200 rounded-b-2xl" *ngIf="enablePagination">
+        <p class="text-sm text-gray-600">Mostrando <span class="font-semibold text-gray-800">{{ filteredItems.length }}</span> de <span class="font-semibold text-gray-800">{{ totalItems }}</span> registros</p>
+      </div>
+    </div>
+
+    <!-- Card view: Animal first, adopter secondary -->
+    <div *ngIf="viewMode === 'card'" class="p-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div *ngFor="let item of filteredItems" class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg overflow-hidden cursor-pointer transition-shadow"
+          (click)="toggleCardSelection(item); $event.stopPropagation()">
+
+          <div class="relative">
+            <div class="w-full h-56 bg-gray-100 overflow-hidden">
+              <img class="w-full h-full object-cover" [src]="getImageUrl(getNestedValue(item, columns[0]?.imageField || columns[0]?.key || ''))"
+                [alt]="columns[0]?.imageAlt || getNestedValue(item, columns[0]?.textField || columns[0]?.key || '')" (error)="onImageError($event)" />
+            </div>
+            <div class="absolute left-4 bottom-4 bg-white/80 backdrop-blur rounded-full px-3 py-1 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg overflow-hidden bg-gray-50">
+                <img class="w-full h-full object-cover" [src]="getImageUrl(getNestedValue(item, columns[1]?.imageField || columns[1]?.key || ''))"
+                  [alt]="columns[1]?.imageAlt || getNestedValue(item, columns[1]?.textField || columns[1]?.key || '')" (error)="onImageError($event)" />
+              </div>
+              <div class="text-sm">
+                <div class="font-semibold text-gray-900 truncate">{{ getNestedValue(item, columns[1]?.textField || columns[1]?.key || '') }}</div>
+                <div class="text-xs text-gray-500 truncate">{{ item.userdto?.[0]?.email || 'Sin email' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <h3 class="text-lg font-extrabold text-gray-900 truncate">{{ getNestedValue(item, columns[0]?.textField || columns[0]?.key || '') || 'Sin nombre' }}</h3>
+            <p class="text-sm text-gray-500 mt-1 truncate">{{ item.petdto?.[0]?.breed || 'Raza desconocida' }}</p>
+
+            <!-- Status Badge -->
+            <div class="mt-2 inline-block">
+              <span [ngClass]="getStatusBadgeClass(item.status)" class="px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                {{ item.status === 'Enviado' ? '📤 Enviado' :
+                   item.status === 'Pendiente' ? '⏳ Pendiente' :
+                   item.status === 'Evaluación' ? '🔍 Evaluación' :
+                   item.status === 'En revisión' ? '👀 En revisión' :
+                   item.status === 'Aceptada' ? '✅ Aceptada' :
+                   item.status === 'Rechazada' ? '❌ Rechazada' :
+                   item.status === 'Pendiente entrega' ? '📦 Pendiente entrega' :
+                   item.status === 'Finalizado' ? '🎉 Finalizado' :
+                   item.status }}
+              </span>
+            </div>
+
+            <div class="mt-3 flex items-center gap-4 text-sm text-gray-600">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-sm text-gray-400">calendar_month</span>
+                <span>{{ getNestedValue(item, 'createdAt') | date:'mediumDate' }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-sm text-gray-400">pets</span>
+                <span>{{ getNestedValue(item, 'petdto.age') || '?' }} años</span>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center gap-3">
+              <ng-container *ngFor="let action of getNonBulkActions()">
+                <button *ngIf="isActionVisible(action, item)" [disabled]="isActionDisabled(action, item)"
+                  (click)="triggerAction(action.name, item); $event.stopPropagation()"
+                  [ngClass]="getActionButtonClass(action.color)"
+                  class="px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                  <span class="material-symbols-rounded text-base">{{ action.icon }}</span>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+
+          <div *ngIf="item.selected" class="p-3 bg-gradient-to-r from-orange-50 to-pink-50 border-t border-orange-100">
+            <div class="flex items-center justify-center gap-2 text-sm text-orange-700 font-medium">
+              <span class="material-symbols-rounded text-lg">check_circle</span>
+              Seleccionada
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <ng-container *ngIf="!filteredItems.length && !spinner">
+      <div class="text-center py-16">
+        <div class="mx-auto w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6">
+          <span class="material-symbols-rounded text-4xl text-gray-400">search_off</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-700 mb-2">No hay registros</h3>
+        <p class="text-gray-500 max-w-md mx-auto mb-8">No se encontraron registros que coincidan con los filtros aplicados. Intenta con otros términos o ajusta los filtros.</p>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,517 @@
+<header
+  class="w-full bg-gradient-to-r from-gray-900 via-[#1a2226] to-gray-900 backdrop-blur-sm bg-opacity-95 shadow-2xl relative z-50"
+>
+  <!-- Barra superior: Logo + Navegación + Usuario -->
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between h-15">
+      <!-- Logo con efecto moderno -->
+      <div class="flex items-center">
+        <a routerLink="/index" class="flex items-center group">
+          <div class="relative">
+            <div
+              class="absolute -inset-1 rounded-lg blur opacity-30 group-hover:opacity-70 transition-opacity duration-500"
+            ></div>
+            <img
+              src="https://res.cloudinary.com/dfnywietn/image/upload/v1767195324/w4i7f1bdpsdlkeexrgvk.png"
+              alt="PestMe"
+              class="relative h-10 w-30 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3 drop-shadow-lg"
+            />
+          </div>
+        </a>
+
+        <!-- Navegación principal desktop - Ahora junto al logo -->
+        <nav class="hidden md:flex md:items-center ml-6 lg:ml-8">
+          <div
+            class="flex items-center space-x-1 bg-gray-900/50 backdrop-blur-sm rounded-2xl p-1.5"
+          >
+            <a
+              routerLink="/index"
+              routerLinkActive="text-orange-400 shadow-lg"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+            >
+              <span class="material-symbols-rounded text-lg">home</span>
+              <span class="hidden lg:inline">Inicio</span>
+            </a>
+            <a
+              [routerLink]="user ? ['/match'] : null"
+              [queryParams]="{ validate: true }"
+              routerLinkActive="text-orange-400 shadow-lg"
+              (click)="!user ? validateRouter('/match', $event) : null"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 relative group"
+            >
+              <span class="material-symbols-rounded text-lg">favorite</span>
+              <span class="hidden lg:inline">Haz Match!</span>
+            </a>
+            <a
+              [routerLink]="user ? ['/sheltter'] : null"
+              [queryParams]="{ validate: true }"
+              routerLinkActive="text-orange-400 shadow-lg"
+              (click)="validateRouter('/sheltter', $event)"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+            >
+              <span class="material-symbols-rounded text-lg">pets</span>
+              <span class="hidden lg:inline">Protectoras</span>
+            </a>
+            <a
+              routerLink="/adopt"
+              routerLinkActive="text-orange-400 shadow-lg"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+            >
+              <span class="material-symbols-rounded text-lg">family_home</span>
+              <span class="hidden lg:inline">Adoptar</span>
+            </a>
+            <a
+              routerLink="/forum"
+              routerLinkActive="text-orange-400 shadow-lg"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+            >
+              <span class="material-symbols-rounded text-lg">forum</span>
+              <span class="hidden lg:inline">Comunidad</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Área derecha: Búsqueda + Usuario -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <!-- Usuario no logueado -->
+        <button
+          *ngIf="!user"
+          class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-4 sm:px-6 py-2 rounded-xl text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5"
+          routerLink="/login"
+        >
+          <span
+            class="material-symbols-rounded align-middle mr-1 sm:mr-2 text-base"
+            >login</span
+          >
+          <span class="hidden sm:inline">Iniciar sesión</span>
+          <span class="sm:hidden">Entrar</span>
+        </button>
+
+        <!-- Usuario logueado -->
+        <div *ngIf="user" class="flex items-center space-x-2 sm:space-x-3">
+          <!-- Notificaciones con efecto moderno -->
+          <button
+            class="relative p-2 sm:p-2.5 bg-gray-900/40 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-300 group"
+            title="Notificaciones"
+            (click)="showDialogNotification = true"
+          >
+            <span
+              class="material-symbols-rounded text-lg sm:text-xl text-gray-300 group-hover:text-white"
+            >
+              notifications
+            </span>
+            <span
+              *ngIf="unreadNotifications > 0"
+              class="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-pulse"
+            >
+              {{ unreadNotifications }}
+            </span>
+          </button>
+
+          <!-- Perfil con dropdown - Solo avatar en móvil, texto en desktop -->
+          <div class="relative group">
+            <button
+              class="flex items-center space-x-2 sm:space-x-3 focus:outline-none"
+            >
+              <div class="text-right hidden lg:block">
+                <p class="text-sm font-medium text-white">
+                  {{ user.username }}
+                </p>
+                <p class="text-xs text-gray-400">En línea</p>
+              </div>
+              <div class="relative">
+                <div
+                  class="absolute -inset-1 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-500"
+                ></div>
+                <img
+                  [src]="user.avatarUrl || 'https://via.placeholder.com/40'"
+                  alt="profile"
+                  class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-transparent group-hover:border-orange-400 transition-all duration-300 shadow-lg"
+                />
+                <span
+                  class="absolute -bottom-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-gray-900"
+                ></span>
+              </div>
+            </button>
+
+            <!-- Menú dropdown moderno - CON z-index máximo -->
+            <div
+              class="absolute right-0 top-full mt-2 sm:mt-3 w-48 sm:w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-[9999]"
+            >
+              <div class="p-3 sm:p-4 border-b border-white/10">
+                <p class="text-white font-medium text-sm sm:text-base truncate">
+                  {{ user.username }}
+                </p>
+                <p class="text-gray-400 text-xs sm:text-sm truncate">
+                  {{ user.email }}
+                </p>
+              </div>
+              <div class="p-2">
+                <a
+                  routerLink="/admin"
+                  class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg sm:rounded-lg transition-all duration-200 text-sm"
+                >
+                  <span class="material-symbols-rounded text-lg"
+                    >dashboard</span
+                  >
+                  <span class="font-medium">Panel de control</span>
+                </a>
+                <!-- <a
+                  routerLink="/my-pets"
+                  class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg sm:rounded-lg transition-all duration-200 text-sm"
+                >
+                  <span class="material-symbols-rounded text-lg">pets</span>
+                  <span class="font-medium">Mis Mascotas</span>
+                </a>
+                <a
+                  routerLink="/settings"
+                  class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg sm:rounded-lg transition-all duration-200 text-sm"
+                >
+                  <span class="material-symbols-rounded text-lg">settings</span>
+                  <span class="font-medium">Configuración</span>
+                </a> -->
+                <div class="border-t border-white/10 my-2"></div>
+                <button
+                  (click)="logout()"
+                  class="flex items-center space-x-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 w-full px-3 py-2 rounded-lg sm:rounded-lg transition-all duration-200 text-sm"
+                >
+                  <span class="material-symbols-rounded text-lg">logout</span>
+                  <span class="font-medium">Cerrar sesión</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón hamburguesa móvil - Solo en móvil -->
+        <button
+          (click)="toggleMobileMenu()"
+          class="md:hidden p-2.5 bg-gray-900/40 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-300"
+          aria-label="Abrir menú"
+        >
+          <span class="material-symbols-rounded text-2xl text-white">
+            {{ isMobileMenuOpen ? "close" : "menu" }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú móvil moderno - Solo visible en móvil - CON z-index máximo -->
+  <div
+    class="md:hidden transition-all duration-500 ease-in-out overflow-hidden fixed inset-x-0 top-15 z-[9999]"
+    [class.max-h-0]="!isMobileMenuOpen"
+    [class.max-h-screen]="isMobileMenuOpen"
+  >
+    <div
+      class="bg-gray-900/95 backdrop-blur-xl mx-4 my-3 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6 border border-white/10 shadow-2xl"
+    >
+      <!-- Búsqueda móvil -->
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+        >
+          <span class="material-symbols-rounded text-gray-400 text-xl"
+            >search</span
+          >
+        </div>
+        <input
+          type="text"
+          placeholder="Buscar en PestMe..."
+          class="w-full pl-12 pr-4 py-3 bg-gray-800/60 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/30 transition-all duration-300 text-sm"
+        />
+      </div>
+
+      <!-- Enlaces principales móvil -->
+      <div class="space-y-2">
+        <a
+          routerLink="/index"
+          (click)="closeMobileMenu()"
+          class="flex items-center justify-between text-gray-300 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-300 group"
+        >
+          <div class="flex items-center space-x-4">
+            <span
+              class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-300"
+              >home</span
+            >
+            <span class="font-medium">Inicio</span>
+          </div>
+          <span class="material-symbols-rounded text-gray-400"
+            >chevron_right</span
+          >
+        </a>
+        <a
+          routerLink="/match"
+          (click)="closeMobileMenu()"
+          class="flex items-center justify-between text-gray-300 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-300 group"
+        >
+          <div class="flex items-center space-x-4">
+            <span
+              class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-300"
+              >favorite</span
+            >
+            <span class="font-medium">Haz Match!</span>
+          </div>
+          <span class="material-symbols-rounded text-gray-400"
+            >chevron_right</span
+          >
+        </a>
+        <a
+          routerLink="/protected"
+          (click)="closeMobileMenu()"
+          class="flex items-center justify-between text-gray-300 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-300 group"
+        >
+          <div class="flex items-center space-x-4">
+            <span
+              class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-300"
+              >pets</span
+            >
+            <span class="font-medium">Protectoras</span>
+          </div>
+          <span class="material-symbols-rounded text-gray-400"
+            >chevron_right</span
+          >
+        </a>
+        <a
+          routerLink="/adopt"
+          (click)="closeMobileMenu()"
+          class="flex items-center justify-between text-gray-300 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-300 group"
+        >
+          <div class="flex items-center space-x-4">
+            <span
+              class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-300"
+              >family_home</span
+            >
+            <span class="font-medium">Adoptar</span>
+          </div>
+          <span class="material-symbols-rounded text-gray-400"
+            >chevron_right</span
+          >
+        </a>
+        <a
+          routerLink="/forum"
+          (click)="closeMobileMenu()"
+          class="flex items-center justify-between text-gray-300 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-300 group"
+        >
+          <div class="flex items-center space-x-4">
+            <span
+              class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-300"
+              >forum</span
+            >
+            <span class="font-medium">Comunidad</span>
+          </div>
+          <span class="material-symbols-rounded text-gray-400"
+            >chevron_right</span
+          >
+        </a>
+      </div>
+
+      <!-- Usuario móvil -->
+      <div *ngIf="user" class="border-t border-white/10 pt-4 sm:pt-6">
+        <div
+          class="flex items-center space-x-3 px-2 py-3 bg-gray-800/40 rounded-xl"
+        >
+          <div class="relative">
+            <img
+              [src]="user.avatarUrl || 'https://via.placeholder.com/40'"
+              alt="profile"
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-orange-500/50"
+            />
+            <span
+              class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-gray-900"
+            ></span>
+          </div>
+          <div class="flex-1">
+            <p class="text-white font-medium text-sm sm:text-base">
+              {{ user.username }}
+            </p>
+            <p class="text-gray-400 text-xs sm:text-sm truncate">
+              {{ user.email }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Enlaces de usuario móvil -->
+        <div class="space-y-2 mt-3 sm:mt-4">
+          <a
+            routerLink="/my-pets"
+            (click)="closeMobileMenu()"
+            class="flex items-center space-x-4 text-gray-300 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm"
+          >
+            <span class="material-symbols-rounded">pets</span>
+            <span class="font-medium">Mis Mascotas</span>
+          </a>
+          <a
+            routerLink="/settings"
+            (click)="closeMobileMenu()"
+            class="flex items-center space-x-4 text-gray-300 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm"
+          >
+            <span class="material-symbols-rounded">settings</span>
+            <span class="font-medium">Configuración</span>
+          </a>
+          <a
+            routerLink="/notifications"
+            (click)="closeMobileMenu()"
+            class="flex items-center space-x-4 text-gray-300 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm"
+          >
+            <span class="material-symbols-rounded">notifications</span>
+            <span class="font-medium">Notificaciones</span>
+            <span
+              *ngIf="unreadNotifications > 0"
+              class="ml-auto bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center"
+            >
+              {{ unreadNotifications }}
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Acciones móvil -->
+      <div class="border-t border-white/10 pt-4 sm:pt-6">
+        <div *ngIf="user" class="space-y-3">
+          <button
+            (click)="logout(); closeMobileMenu()"
+            class="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-red-900/30 to-red-800/20 hover:from-red-900/40 hover:to-red-800/30 text-red-300 border border-red-700/30 font-medium py-3 rounded-xl transition-all duration-300 text-sm"
+          >
+            <span class="material-symbols-rounded">logout</span>
+            <span class="font-medium">Cerrar sesión</span>
+          </button>
+        </div>
+
+        <div *ngIf="!user" class="space-y-3">
+          <button
+            (click)="closeMobileMenu()"
+            routerLink="/login"
+            class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 rounded-xl text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-orange-500/25"
+          >
+            <span class="material-symbols-rounded align-middle mr-2"
+              >login</span
+            >
+            Iniciar sesión
+          </button>
+          <button
+            (click)="closeMobileMenu()"
+            routerLink="/register"
+            class="w-full bg-transparent hover:bg-white/5 text-orange-300 border border-orange-500/30 font-semibold py-3 rounded-xl text-sm transition-all duration-300"
+          >
+            <span class="material-symbols-rounded align-middle mr-2"
+              >person_add</span
+            >
+            Crear cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de scroll moderno -->
+  <div class="h-1 w-full bg-gray-900/50 overflow-hidden">
+    <div
+      class="h-full bg-gradient-to-r from-transparent via-orange-400 to-transparent"
+    ></div>
+  </div>
+</header>
+
+<app-no-user [showDialog]="showDialog"></app-no-user>
+<app-dialog
+  *ngIf="showDialogNotification"
+  title="sdsd"
+  (close)="showDialogNotification = false"
+  [width]="'600px'"
+  [maxHeight]="'80vh'"
+  [button]="false"
+>
+  <!-- <app-table
+    *ngIf="!spinner"
+    [items]="dataSource?.notification"
+    [userLogin]="user"
+    (onClickEmmiter)="onClick($event)"
+  ></app-table> -->
+
+  <!-- notification-list.component.html -->
+<div class="">
+  <div class="max-w-4xl mx-auto">
+
+
+    <!-- Lista de notificaciones -->
+    <div class="space-y-4" *ngIf="dataSource.totalItems > 0">
+      <div *ngFor="let notification of dataSource.notification"
+           class="bg-white rounded-2xl border-b border-gray-200 hover:bg-gray-100 ">
+
+        <!-- Header de la notificación -->
+        <div class="p-5 " (click)="onClickRouter(notification)">
+          <div class="flex items-start justify-between">
+            <div class="flex items-start space-x-3">
+              <!-- Indicador de no leído -->
+              <div *ngIf="!notification.read" class="mt-1">
+                <div class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+              </div>
+
+              <!-- Avatar del usuario -->
+              <div class="relative">
+                <img *ngIf="notification.petDto?.images?.length"
+                       [src]="notification.petDto.images[0]"
+                     alt="Avatar"
+                     class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm">
+                <div *ngIf="notification.petDto"
+                     class="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-100 rounded-full border border-white flex items-center justify-center">
+                  <svg class="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Información principal -->
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-900 text-lg mb-1">
+                  {{ notification.title }}
+                </h3>
+
+                <!-- Badge de estado -->
+                <div class="mt-2">
+                  Nuevo estado:
+                  <span [ngClass]="{
+                    'bg-green-100 text-green-800': notification.status === 'Finalizado',
+                    'bg-yellow-100 text-yellow-800': notification.status === 'Pendiente',
+                    'bg-blue-100 text-blue-800': notification.status === 'En proceso',
+                    'bg-gray-100 text-gray-800': !notification.status
+                  }"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                    <svg *ngIf="notification.status === 'Finalizado'" class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ notification.status || 'Sin estado' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fecha -->
+            <div class="text-xs text-gray-500 whitespace-nowrap ml-4">
+              {{ notification.createdAt | date:'short' }}
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="dataSource.totalItems === 0"
+         class="text-center py-16">
+      <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No hay notificaciones</h3>
+      <p class="text-gray-600 max-w-md mx-auto">
+        Cuando tengas nuevas notificaciones, aparecerán aquí.
+      </p>
+    </div>
+  </div>
+</div>
+</app-dialog>

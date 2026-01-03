@@ -1,0 +1,43 @@
+<div *ngIf="requests?.length">
+  <div
+    *ngFor="let req of requests"
+    class="bg-white border-b border-gray-200 p-4 mb-3 flex justify-between items-center  transition"
+  >
+    <div>
+      <p class="font-medium">{{ req.userdto[0].username }}</p>
+      <p class=" rounded-xl border text-center"
+              [ngClass]="{
+                'bg-yellow-50 text-yellow-400 px-2  border-yellow-300':
+                  req.status === 'Pendiente',
+                'bg-green-100 text-green-700 px-2  border-green-300':
+                  req.status === 'Aceptada',
+                'bg-red-100 text-red-700 px-2  border-red-300':
+                  req.status === 'Rechazada'
+              }"
+            >
+              {{ req.status | titlecase }}
+            </p>
+    </div>
+    <button
+            class="hover:bg-gray-200 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center transition cursor-pointer"
+            (click)="sendViewEmitter(req)"
+          >
+            <span
+              class="material-symbols-rounded text-base transition-transform duration-200"
+            >
+               table_eye
+            </span>
+          </button>
+
+  </div>
+</div>
+<div
+  class="bg-white rounded-xl p-4 mb-3 flex justify-between items-center  transition"
+  *ngIf="!requests?.length"
+>
+  <div>
+    <p class="font-medium">No existen solicitudes de adopción</p>
+    <p class="text-sm text-gray-500">No existen solicitudes de adopción</p>
+  </div>
+  <div class="flex gap-2"></div>
+</div>

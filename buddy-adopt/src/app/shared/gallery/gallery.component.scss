@@ -1,0 +1,59 @@
+.img-fluidd {
+    width: 100%; /* Asegura que la imagen ocupe el ancho completo del contenedor */
+    height: 180px; /* Establece una altura fija */
+    object-fit: cover; /* Recorta la imagen para llenar el contenedor manteniendo proporciones */
+    border-radius: 8px; /* Opcional: redondear los bordes */
+  }
+
+  .position-relative {
+    position: relative;
+  }
+  
+  .icon-overlay {
+    position: absolute;
+    top: 10px; /* Ajusta según tus necesidades */
+    right: 10px; /* Ajusta según tus necesidades */
+    font-size: 24px; /* Tamaño del icono */
+    color: green; /* Cambia el color del ícono */
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente opcional */
+    border-radius: 50%; /* Redondear si es necesario */
+    padding: 5px; /* Espaciado opcional */
+  }
+  .icon-overlay-buttom {
+    position: absolute;
+    bottom: 65px;
+    left: 8px;
+    font-size: 24px;
+    color: blue; /* Cambia a tu color preferido */
+    border-radius: 0.50rem;
+  }
+  .icon-overlay-buttom-right {
+    position: absolute;
+    bottom: 58px;
+    right: 8px;
+    font-size: 24px;
+    color: blue; /* Cambia a tu color preferido */
+    border-radius: 0.50rem;
+  }
+  .button-mini-primary {
+    display: inline-flex; /* Asegura que el contenido dentro del botón esté alineado */
+    align-items: center; /* Centra verticalmente el contenido */
+    gap: 5px; /* Espaciado entre el ícono y el texto */
+    background-color: white; /* Color de fondo */
+    color: transparent; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados opcionales */
+    cursor: pointer;
+  }
+  
+  .fixed-size-icon {
+    font-size: 15px; /* Tamaño del ícono */
+    line-height: 1; /* Asegura que no haya espaciado extra */
+    margin-top: 10px;
+  }
+  
+  .button-content {
+    display: flex; /* Alinea ícono y texto horizontalmente */
+    align-items: center; /* Centra verticalmente */
+  }
+  

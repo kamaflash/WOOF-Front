@@ -1,0 +1,284 @@
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+
+  <!-- Fondo futurista -->
+  <div class="fixed inset-0 bg-gray-900">
+    <!-- Grid de puntos -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0); background-size: 40px 40px;"></div>
+
+    <!-- Líneas animadas -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse"></div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-pulse"></div>
+
+    <!-- Elementos de fondo -->
+    <div class="absolute top-1/4 left-10 w-64 h-64 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-10 w-80 h-80 bg-gradient-to-bl from-blue-500/5 to-transparent rounded-full blur-3xl animate-pulse"></div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div class="relative w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+    <div class="flex flex-col lg:flex-row">
+
+      <!-- Panel izquierdo -->
+      <div class="lg:w-1/2 bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8 lg:p-12 relative overflow-hidden">
+        <!-- Elementos decorativos -->
+        <div class="absolute -top-16 -left-16 w-32 h-32 bg-orange-500/10 rounded-full"></div>
+        <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-blue-500/10 rounded-full"></div>
+
+        <!-- Logo -->
+        <div class="relative mb-12">
+          <img
+              src="https://res.cloudinary.com/dfnywietn/image/upload/v1767195324/w4i7f1bdpsdlkeexrgvk.png"
+              alt="PestMe"
+              class="relative h-10 w-30 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3 drop-shadow-lg"
+            />
+        </div>
+
+        <!-- Contenido -->
+        <div class="relative mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+            Bienvenido a la<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-300">Plataforma woof</span>
+          </h2>
+          <p class="text-gray-300 mb-8 max-w-md">
+            Tu espacio para adoptar, cuidar y dar seguimiento a nuevas historias.
+          </p>
+
+          <!-- Características -->
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Haz match para conocer a tu futuro compañero</span>
+            </div>
+            <div class="flex items-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Busqueda de un nuevo hogar</span>
+            </div>
+            <div class="flex items-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Participa y colabora con entidades o protectoras</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="relative pt-6 border-t border-gray-700/50">
+          <p class="text-gray-400 text-sm">© 2025 AppPro. Todos los derechos reservados.</p>
+        </div>
+      </div>
+
+      <!-- Panel derecho - Formulario -->
+      <div class="lg:w-1/2 bg-white p-8 lg:p-12 flex items-center">
+        <div class="w-full max-w-md mx-auto">
+          <!-- Header -->
+          <div class="text-center mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Iniciar Sesión</h2>
+            <p class="text-gray-500 text-sm">Ingresa tus credenciales para continuar</p>
+          </div>
+
+          <!-- Formulario -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            <!-- Email -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  formControlName="usernamemail"
+                  placeholder="tu@email.com"
+                  class="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  [ngClass]="{
+                    'border-green-500 focus:ring-green-500/30': loginForm.get('usernamemail')?.valid && loginForm.get('usernamemail')?.dirty,
+                    'border-red-500 focus:ring-red-500/30': loginForm.get('usernamemail')?.invalid && loginForm.get('usernamemail')?.dirty
+                  }"
+                />
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <svg
+                    *ngIf="loginForm.get('usernamemail')?.valid && loginForm.get('usernamemail')?.dirty"
+                    class="w-5 h-5 text-green-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <svg
+                    *ngIf="loginForm.get('usernamemail')?.invalid && loginForm.get('usernamemail')?.dirty"
+                    class="w-5 h-5 text-red-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              </div>
+              <div *ngIf="loginForm.get('usernamemail')?.invalid && loginForm.get('usernamemail')?.dirty"
+                   class="text-red-500 text-xs mt-1">
+                Por favor, ingresa un correo electrónico válido
+              </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <a href="/forgot-password" class="text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <input
+                  type="password"
+                  formControlName="password"
+                  placeholder="••••••••"
+                  class="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  [ngClass]="{
+                    'border-green-500 focus:ring-green-500/30': loginForm.get('password')?.valid && loginForm.get('password')?.dirty,
+                    'border-red-500 focus:ring-red-500/30': loginForm.get('password')?.invalid && loginForm.get('password')?.dirty
+                  }"
+                />
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <svg
+                    *ngIf="loginForm.get('password')?.valid && loginForm.get('password')?.dirty"
+                    class="w-5 h-5 text-green-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <svg
+                    *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.dirty"
+                    class="w-5 h-5 text-red-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              </div>
+              <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.dirty"
+                   class="text-red-500 text-xs mt-1">
+                La contraseña debe tener al menos 8 caracteres
+              </div>
+            </div>
+
+            <!-- Recordar -->
+            <div class="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+              />
+              <label for="remember-me" class="ml-2 block text-sm text-gray-700 cursor-pointer">
+                Recordar esta sesión
+              </label>
+            </div>
+
+            <!-- Botón Submit -->
+            <button
+              type="submit"
+              [disabled]="loginForm.invalid || spinner"
+              class="w-full flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-4 py-3.5 rounded-xl text-sm transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98]"
+            >
+              <svg
+                *ngIf="spinner"
+                class="animate-spin h-5 w-5 text-white mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+
+              <span *ngIf="!spinner" class="flex items-center">
+                Iniciar Sesión
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </span>
+              <span *ngIf="spinner">Verificando...</span>
+            </button>
+          </form>
+
+          <!-- Separador -->
+          <div class="relative my-8">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-4 bg-white text-gray-500">o continuar con</span>
+            </div>
+          </div>
+
+          <!-- Botones Social -->
+          <div class="grid grid-cols-2 gap-3 mb-8">
+            <button
+              class="flex items-center justify-center py-3 px-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:border-gray-400 active:scale-[0.98]"
+            >
+              <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">Google</span>
+            </button>
+            <button
+              class="flex items-center justify-center py-3 px-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:border-gray-400 active:scale-[0.98]"
+            >
+              <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">Facebook</span>
+            </button>
+          </div>
+
+          <!-- Registro -->
+          <div class="text-center pt-6 border-t border-gray-200">
+            <p class="text-gray-600 text-sm">
+              ¿No tienes una cuenta?
+              <a
+                href="/register"
+                class="font-semibold text-orange-500 hover:text-orange-600 transition-colors ml-1"
+              >
+                Crear cuenta
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

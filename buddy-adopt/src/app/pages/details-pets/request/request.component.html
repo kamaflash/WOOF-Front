@@ -1,0 +1,27 @@
+<div *ngIf="animal" class="p-4 rounded-xl">
+  <form [formGroup]="form">
+    <div formArrayName="answers" class="space-y-4">
+      <div
+        *ngFor="let question of animal.questions; let i = index"
+        class="px-2"
+      >
+        <div class="input-container">
+          <input
+            type="text"
+            [formControlName]="i"
+            id="respuesta-{{ i }}"
+            placeholder=" "
+            class="input-field"
+          />
+          <label for="respuesta-{{ i }}" class="input-label">
+            {{
+              answersArray.at(i)?.invalid && answersArray.at(i)?.touched
+                ? question + " *Requerido"
+                : question
+            }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

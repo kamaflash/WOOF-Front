@@ -1,0 +1,211 @@
+.custom-dynamic-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* Form grid with dynamic column count */
+.form-grid {
+  display: grid;
+  gap: 1rem; /* Espaciado entre los elementos */
+  grid-template-columns: repeat(1, 1fr); /* Default 1 column */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #1f2937;
+  background: white;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #fb923c;
+  box-shadow: 0 0 0 1px #fdba74;
+}
+
+.input-field.ng-invalid.ng-touched {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #fca5a5;
+}
+
+.input-label {
+  position: absolute;
+  left: 0.75rem;
+  top: -0.5rem !important;
+  font-size: 0.75rem !important;
+  color: #f97316;
+  background-color: white;
+  padding: 0 0.25rem;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.input-field.ng-invalid.ng-touched + .input-label {
+  color: #ef4444;
+}
+
+
+
+
+/* Adjusting full-width input fields */
+.full-width {
+  grid-column: span 2; /* Asegura que algunos campos ocupen más de una columna */
+}
+
+/* Custom Select */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-display {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.custom-select-display.filled {
+  padding-top: 1.25rem; /* Para mostrar el label flotante */
+}
+
+.custom-select-display.invalid {
+  border-color: #ef4444;
+}
+
+.arrow {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Dropdown */
+.custom-select-dropdown {
+  position: absolute;
+  width: 100%;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+  display: none;
+  z-index: 10;
+}
+
+.custom-select-dropdown.show {
+  display: block;
+}
+
+.custom-select-dropdown li {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.custom-select-dropdown li:hover {
+  background-color: #f97316;
+  color: white;
+}
+
+/* Flecha */
+.arrow {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Label flotante */
+.custom-select-container .input-label {
+  position: absolute;
+  left: 0.75rem;
+  top: -0.5rem;
+  font-size: 0.75rem;
+  color: #fb923c;
+  background-color: white;
+  padding: 0 0.25rem;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.custom-select-display.ng-invalid.ng-touched {
+  border-color: #ef4444;
+}
+/* Estilos base de input y label */
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #1f2937;
+  background: white;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #fb923c;
+  box-shadow: 0 0 0 1px #fdba74;
+}
+
+/* Estilo cuando el input está inválido y ha sido tocado */
+.input-field.ng-invalid.ng-touched + .input-label {
+  color: #ef4444; /* Rojo para campos inválidos */
+}
+
+/* Los inputs inválidos tendrán un borde de color rojo */
+.input-field.ng-invalid.ng-touched {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #fca5a5;
+}
+
+.custom-checkbox {
+  /* Ocultamos el checkbox nativo pero sigue siendo accesible */
+  position: relative;
+  width: 16px;
+  height: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid #ff8904;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+  outline: none;
+  display: inline-block;
+}
+
+/* Fondo naranja cuando está marcado */
+.custom-checkbox:checked {
+  background-color: #ff8904;
+  border-color: #ff8904;
+}
+
+/* Tick blanco */
+.custom-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}

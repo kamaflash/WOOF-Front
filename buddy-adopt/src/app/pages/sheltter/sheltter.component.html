@@ -1,0 +1,21 @@
+<app-preload [spinner]="spinner"></app-preload>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" *ngIf="!spinner">
+  <!-- Fondo decorativo sutil -->
+ <app-table
+        [items]="dataSource"
+        [userLogin]="userLogin"
+        [columns]="tableColumns"
+        [actions]="tableActions"
+        [enableSearch]="true"
+        [enableFilter]="true"
+        [seeFilter]="false"
+        [enableCheckbox]="false"
+        [enableViewToggle]="true"
+        [searchFields]="['name']"
+        [filterOptions]="matchFilters"
+        [viewMode]="'card'"
+        (actionTriggered)="onTableAction($event)"
+        (onClickEmmiter)="onRowClick($event)"
+      ></app-table>
+</section>

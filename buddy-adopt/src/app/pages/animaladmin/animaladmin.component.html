@@ -1,0 +1,790 @@
+<!-- Spinner -->
+<app-preload [spinner]="spinner"></app-preload>
+
+<div class="min-h-screen">
+  <!-- Header -->
+  <app-nadvar-animal
+    [mascota]="mascota"
+    [userLogin]="userLogin"
+    [isSolicited]="isSolicited"
+    (accionEmitter)="accion($event)"
+    (tabsEmitter)="tabActiva = $event"
+  ></app-nadvar-animal>
+  <!-- Contenido principal -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Pestaña Información General -->
+    <div *ngIf="tabActiva === 'info'" class="space-y-6">
+      <!-- Estadísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          *ngFor="let stat of estadisticas"
+          class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center space-x-4"
+        >
+          <div
+            [class]="
+              stat.bgColor +
+              ' w-12 h-12 rounded-lg flex items-center justify-center'
+            "
+          >
+            <span class="material-symbols-rounded text-white">{{
+              stat.icon
+            }}</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-sm text-gray-500">{{ stat.label }}</p>
+            <p [class]="stat.trendColor + ' text-xs font-medium'">
+              {{ stat.trend }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Columna principal -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Información básica -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div
+              class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+            >
+              <h2 class="text-lg font-semibold text-gray-900">
+                Información Principal
+              </h2>
+              <div
+                class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
+                [ngClass]="{
+                      'text-orange-400 border-orange-400':
+                        mascota.status === 'En adopción' || mascota.status === 'Pendiente',
+                      'bg-gradient-to-r from-green-50 to-emerald-50 text-emerald-700 border-emerald-200':
+                        mascota.status === 'Adoptado',
+                    }"
+              >
+                <span
+                  class="w-2 h-2 rounded-full"
+                  [ngClass]="{
+                        'bg-orange-500 ': mascota.status === 'En adopción' || mascota.status === 'Pendiente',
+                        'bg-green-500': mascota.status === 'Adoptado',
+                      }"
+                ></span>
+                {{ mascota.status }}
+              </div>
+            </div>
+            <div class="px-6 py-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Nombre</label
+                    >
+                    <p class="text-gray-900">{{ mascota?.name | titlecase }}</p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Especie</label
+                    >
+                    <p class="text-gray-900">
+                      {{ mascota?.specie | titlecase }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Raza</label
+                    >
+                    <p class="text-gray-900">
+                      {{ mascota?.breed | titlecase }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Edad</label
+                    >
+                    <p class="text-gray-900">{{ mascota?.age }}</p>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Tamaño</label
+                    >
+                    <p class="text-gray-900">{{ mascota?.size | titlecase }}</p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Ubicación</label
+                    >
+                    <p class="text-gray-900">
+                      {{ mascota?.address | titlecase }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Género</label
+                    >
+                    <p class="text-gray-900">
+                      {{ mascota?.sex | titlecase }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-500"
+                      >Peso</label
+                    >
+                    <p class="text-gray-900">
+                      {{ mascota?.weight || "No especificado" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Galería -->
+          <!-- Galería simplificada para test -->
+          <!-- Galería con reset de estilos -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div
+              class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+            >
+              <h2 class="text-lg font-semibold text-gray-900">
+                Galería de Imágenes
+              </h2>
+              <span class="text-sm text-gray-500"
+                >{{ mascota?.images?.length || 0 }} imágenes</span
+              >
+            </div>
+            <div class="px-6 py-4">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div
+                  *ngFor="let imagen of mascota?.images; let i = index"
+                  class="relative group cursor-pointer"
+                  (click)="imgPet = imagen"
+                >
+                  <!-- Contenedor con estilos reseteados -->
+                  <div
+                    class="image-container w-full h-24 rounded-lg border-2 overflow-hidden bg-white"
+                    [class.border-orange-500]="imgPet === imagen"
+                    [class.border-gray-200]="imgPet !== imagen"
+                  >
+                    <img
+                      [src]="imagen"
+                      class="image-reset w-full h-full object-cover"
+                      [alt]="'Imagen ' + (i + 1)"
+                      style="
+                        background: transparent !important;
+                        filter: none !important;
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h2 class="text-lg font-semibold text-gray-900">
+                Descripción y Comportamiento
+              </h2>
+            </div>
+            <div class="px-6 py-4">
+              <div class="space-y-4">
+                <div class="space-y-1">
+                  <label class="text-sm font-medium text-gray-500"
+                    >Descripción</label
+                  >
+                  <p class="text-gray-900 whitespace-pre-line">
+                    {{ mascota?.description || "Sin descripción" }}
+                  </p>
+                </div>
+                <div class="space-y-1">
+                  <label class="text-sm font-medium text-gray-500"
+                    >Temperamento</label
+                  >
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span
+                      *ngIf="mascota?.goodWithKids"
+                      class="inline-flex items-center px-4 py-1 rounded-full text-xs font-medium bg-orange-400 text-white border border-orange-300"
+                    >
+                      {{ mascota?.goodWithKids ? "Es bueno con niños" : "" }}
+                    </span>
+                    <span
+                      *ngIf="mascota?.goodWithDogs"
+                      class="inline-flex items-center px-4 py-1 rounded-full text-xs font-medium bg-orange-400 text-white border border-orange-300"
+                    >
+                      {{
+                        mascota?.goodWithDogs ? "Es bueno con otros perros" : ""
+                      }}
+                    </span>
+                    <span
+                      *ngIf="mascota?.goodWithCats"
+                      class="inline-flex items-center px-4 py-1 rounded-full text-xs font-medium bg-orange-400 text-white border border-orange-300"
+                    >
+                      {{
+                        mascota?.goodWithCats ? "Es bueno con otros gatos" : ""
+                      }}
+                    </span>
+                    <span
+                      *ngIf="
+                        !mascota?.goodWithKids &&
+                        !mascota?.goodWithDogs &&
+                        !mascota?.goodWithCats
+                      "
+                      class="text-gray-400"
+                    >
+                      No especificado
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Salud -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h2 class="text-lg font-semibold text-gray-900">
+                Estado de Salud
+              </h2>
+            </div>
+            <div class="px-6 py-4 space-y-3">
+              <div
+                *ngFor="let saludItem of saludItems"
+                class="flex justify-between items-center py-2 border-b border-gray-100 last:border-none"
+              >
+                <span class="text-gray-600">{{ saludItem.label }}</span>
+
+                <span
+                  [class]="
+                    saludItem.value
+                      ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'text-orange-400 border-orange-400'
+                  "
+                  class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
+                >
+                  {{ saludItem.value ? "Sí" : "No" }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Requisitos -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h2 class="text-lg font-semibold text-gray-900">
+                Requisitos de Adopción
+              </h2>
+            </div>
+            <div class="px-6 py-4">
+              <ul class="space-y-2">
+                <li
+                  *ngFor="let question of mascota?.questions; let i = index"
+                  class="flex items-start space-x-2 text-sm text-gray-700"
+                >
+                  <span
+                    class="material-symbols-rounded text-orange-500 text-sm mt-0.5 flex-shrink-0"
+                    >check</span
+                  >
+                  <span>{{ question }}</span>
+                </li>
+                <li
+                  *ngIf="!mascota?.questions || mascota?.questions.length === 0"
+                  class="text-gray-400 text-sm"
+                >
+                  No hay requisitos específicos
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pestaña de Likes -->
+    <div *ngIf="tabActiva === 'likes'" class="space-y-6">
+      <app-table
+        [items]="matches"
+        [userLogin]="userLogin"
+        [columns]="tableColumns"
+        [actions]="tableActions"
+        [enableSearch]="true"
+        [enableFilter]="true"
+        [seeFilter]="false"
+        [enableCheckbox]="false"
+        [enableViewToggle]="true"
+        [searchFields]="['pet.name', 'userdto.0.username']"
+        [filterField]="'status'"
+        [filterOptions]="matchFilters"
+        [defaultFilterStatus]="'Enviado'"
+        [viewMode]="'card'"
+        (actionTriggered)="onTableAction($event)"
+        (onClickEmmiter)="onRowClick($event)"
+      ></app-table>
+    </div>
+
+    <!-- Pestaña de Matches -->
+    <div *ngIf="tabActiva === 'matches'" class="space-y-6">
+      <app-table
+        [items]="matches"
+        [userLogin]="userLogin"
+        [columns]="tableColumns"
+        [actions]="tableActions"
+        [enableSearch]="true"
+        [enableFilter]="true"
+        [seeFilter]="false"
+        [enableCheckbox]="false"
+        [enableViewToggle]="true"
+        [searchFields]="['pet.name', 'userdto.0.username']"
+        [filterField]="'status'"
+        [filterOptions]="matchFilters"
+        [defaultFilterStatus]="'Aceptado'"
+        [viewMode]="'card'"
+        (actionTriggered)="onTableAction($event)"
+        (onClickEmmiter)="onRowClick($event)"
+      ></app-table>
+    </div>
+
+    <!-- Pestaña de Solicitudes -->
+    <div *ngIf="tabActiva === 'solicitudes'" class="space-y-6">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div
+          class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+        >
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Gestión de Solicitudes
+            </h2>
+            <p class="text-sm text-gray-500">
+              Solicitudes de adopción para {{ mascota?.name }}
+            </p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="text-right">
+              <p class="text-2xl font-bold text-gray-900">
+                {{ solicitudesTotales }}
+              </p>
+              <p class="text-sm text-gray-500">solicitudes totales</p>
+            </div>
+            <button
+              class="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              (click)="exportarSolicitudes()"
+            >
+              <span class="material-symbols-rounded text-sm mr-1"
+                >download</span
+              >
+              Exportar
+            </button>
+          </div>
+        </div>
+
+        <div class="px-6 py-4">
+          <!-- Filtros -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <div class="flex-1 flex gap-4">
+              <select
+                (change)="filtrarSolicitudes()"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white flex-1"
+              >
+                <option value="todas">Todas las solicitudes</option>
+                <option value="pendiente">
+                  Pendientes ({{ solicitudesPendientes }})
+                </option>
+                <option value="aprobada">
+                  Aprobadas ({{ solicitudesAprobadas }})
+                </option>
+                <option value="rechazada">
+                  Rechazadas ({{ solicitudesRechazadas }})
+                </option>
+              </select>
+              <select
+                (change)="ordenarSolicitudes()"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white flex-1"
+              >
+                <option value="recientes">Más recientes</option>
+                <option value="antiguas">Más antiguas</option>
+                <option value="compatibilidad">Mayor compatibilidad</option>
+              </select>
+            </div>
+            <input
+              type="text"
+              placeholder="Buscar solicitante..."
+              class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              (input)="filtrarSolicitudes()"
+            />
+          </div>
+
+          <!-- Lista de solicitudes -->
+          <div class="space-y-4">
+            <div
+              *ngFor="let solicitud of solicitudesFiltradas"
+              class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+              [class]="
+                solicitud.estado === 'pendiente'
+                  ? 'border-l-4 border-l-orange-500'
+                  : solicitud.estado === 'aprobada'
+                  ? 'border-l-4 border-l-green-500'
+                  : 'border-l-4 border-l-red-500'
+              "
+            >
+              <!-- Header de la solicitud -->
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-4">
+                  <img
+                    [src]="solicitud.solicitante.fotoPerfil"
+                    [alt]="solicitud.solicitante.nombre"
+                    class="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                  />
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900">
+                      {{ solicitud.solicitante.nombre }}
+                    </h3>
+                    <p class="text-gray-500">
+                      {{ solicitud.solicitante.email }} •
+                      {{ solicitud.solicitante.telefono }}
+                    </p>
+                    <div class="flex items-center space-x-4 mt-1">
+                      <span class="text-sm text-gray-500">
+                        <span
+                          class="material-symbols-rounded text-sm align-middle mr-1"
+                          >calendar_today</span
+                        >
+                        {{ solicitud.fecha | customDate }}
+                      </span>
+                      <span class="text-sm text-gray-500">
+                        <span
+                          class="material-symbols-rounded text-sm align-middle mr-1"
+                          >location_on</span
+                        >
+                        {{ solicitud.solicitante.ciudad }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span
+                    [class]="getBadgeSolicitudClasses(solicitud.estado)"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                  >
+                    {{ solicitud.estado }}
+                  </span>
+                  <p class="text-sm text-gray-500 mt-1">
+                    Compatibilidad: {{ solicitud.compatibilidad }}%
+                  </p>
+                </div>
+              </div>
+
+              <!-- Información detallada -->
+              <div class="grid md:grid-cols-2 gap-6 mb-4">
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-3">
+                    Información del Solicitante
+                  </h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-gray-600"
+                        >Experiencia con mascotas:</span
+                      >
+                      <span class="font-semibold">{{
+                        solicitud.experienciaMascotas
+                          ? "Con experiencia"
+                          : "Sin experiencia"
+                      }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Tipo de vivienda:</span>
+                      <span class="font-semibold">{{
+                        solicitud.tipoVivienda
+                      }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Tiempo solo:</span>
+                      <span class="font-semibold"
+                        >{{ solicitud.tiempoSolo }} horas/día</span
+                      >
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Otras mascotas:</span>
+                      <span class="font-semibold">{{
+                        solicitud.otrasMascotas ? "Sí" : "No"
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-3">Evaluación</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Puntuación general:</span>
+                      <div class="flex items-center space-x-1">
+                        <span
+                          *ngFor="let star of [1, 2, 3, 4, 5]"
+                          class="material-symbols-rounded text-sm"
+                          [class]="
+                            star <= solicitud.puntuacion
+                              ? 'text-yellow-400'
+                              : 'text-gray-300'
+                          "
+                        >
+                          star
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600"
+                        >Verificación documental:</span
+                      >
+                      <span
+                        [class]="
+                          solicitud.documentacionVerificada
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-orange-400 text-orange-800'
+                        "
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      >
+                        {{
+                          solicitud.documentacionVerificada
+                            ? "Completa"
+                            : "Pendiente"
+                        }}
+                      </span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Entrevista realizada:</span>
+                      <span
+                        [class]="
+                          solicitud.entrevistaRealizada
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-orange-400 text-orange-800'
+                        "
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      >
+                        {{ solicitud.entrevistaRealizada ? "Sí" : "No" }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mensaje -->
+              <div class="mb-4">
+                <h4 class="font-semibold text-gray-900 mb-2">
+                  Mensaje del Solicitante
+                </h4>
+                <p
+                  class="text-gray-600 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg"
+                >
+                  {{
+                    solicitud.mensaje ||
+                      "El solicitante no incluyó un mensaje adicional."
+                  }}
+                </p>
+              </div>
+
+              <!-- Acciones -->
+              <div
+                class="flex justify-between items-center pt-4 border-t border-gray-200"
+              >
+                <div class="flex space-x-2">
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 transition-colors text-sm"
+                    (click)="verPerfilSolicitante(solicitud.solicitante.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >person</span
+                    >
+                    Ver Perfil Completo
+                  </button>
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 transition-colors text-sm"
+                    (click)="verSolicitudCompleta(solicitud.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >description</span
+                    >
+                    Ver Solicitud Completa
+                  </button>
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors text-sm"
+                    (click)="contactarSolicitante(solicitud.solicitante.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >mail</span
+                    >
+                    Contactar
+                  </button>
+                </div>
+
+                <!-- Acciones por estado -->
+                <div
+                  class="flex space-x-2"
+                  *ngIf="solicitud.estado === 'pendiente'"
+                >
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-transparent rounded-lg shadow-sm text-white bg-green-600 hover:bg-green-700 transition-colors text-sm"
+                    (click)="aprobarSolicitud(solicitud.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >check</span
+                    >
+                    Aprobar
+                  </button>
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-transparent rounded-lg shadow-sm text-white bg-red-600 hover:bg-red-700 transition-colors text-sm"
+                    (click)="rechazarSolicitud(solicitud.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >close</span
+                    >
+                    Rechazar
+                  </button>
+                </div>
+
+                <div
+                  class="flex space-x-2"
+                  *ngIf="solicitud.estado === 'aprobada'"
+                >
+                  <button
+                    class="inline-flex items-center px-3 py-2 border border-transparent rounded-lg shadow-sm text-white bg-orange-600 hover:bg-orange-700 transition-colors text-sm"
+                    (click)="revertirAprobacion(solicitud.id)"
+                  >
+                    <span class="material-symbols-rounded text-sm mr-1"
+                      >undo</span
+                    >
+                    Revertir
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado vacío -->
+            <div
+              *ngIf="solicitudesFiltradas.length === 0"
+              class="text-center py-12"
+            >
+              <span class="material-symbols-rounded text-4xl text-gray-300 mb-2"
+                >description</span
+              >
+              <h3 class="text-lg font-semibold text-gray-500 mb-2">
+                No hay solicitudes
+              </h3>
+              <p class="text-gray-400">
+                No se encontraron solicitudes con los filtros aplicados.
+              </p>
+              <button
+                class="mt-4 flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors mx-auto"
+                (click)="limpiarFiltros()"
+              >
+                <span class="material-symbols-rounded text-sm mr-2"
+                  >clear_all</span
+                >
+                Limpiar Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Diálogos modales -->
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'request'"
+  title="Solicitud de adopción para {{ mascota?.name }}"
+  [buttonRechazo]="true"
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="handleConfirm('request')"
+  (rechazarEmitter)="handleRechazar('request')"
+  [width]="'600px'"
+  [maxHeight]="'80vh'"
+>
+  <app-request
+    [animal]="mascota"
+    [answers]="requests"
+    [userLogin]="userLogin"
+    (formEmitter)="formEmitterAndReturn($event)"
+  ></app-request>
+</app-dialog>
+
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'request-add'"
+  title="Solicitud de adopción para {{ mascota?.name }}"
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="handleConfirm('request-add')"
+  [width]="'600px'"
+  [maxHeight]="'80vh'"
+>
+  <app-request
+    [animal]="mascota"
+    [answers]="requests"
+    [userLogin]="userLogin"
+    (formEmitter)="formEmitterAndReturn($event)"
+  ></app-request>
+</app-dialog>
+
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'modify-animal'"
+  title="Editar a {{ mascota?.name }}"
+  (close)="showDialog = false"
+  [submitDisabled]="submitDisabled"
+  (confirm)="handleConfirm('modify-animal')"
+  [width]="'1200px'"
+  [maxHeight]="'80vh'"
+>
+  <app-add
+    (sendAnimalForm)="setDisabledButton($event)"
+    [animalInput]="mascota"
+    [typeForm]="typeForm"
+  ></app-add>
+</app-dialog>
+
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'request-list'"
+  title="Solicitudes de {{ mascota?.name }}"
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="submitDelete()"
+  [width]="'1200px'"
+  [maxHeight]="'80vh'"
+>
+  <app-table
+    *ngIf="!spinner"
+    [items]="requests"
+    [userLogin]="userLogin"
+    (onConfirmEmmiter)="confirmRequest($event)"
+    (onCancelEmmiter)="cancelRequest($event)"
+    (onClickEmmiter)="onClick($event)"
+  ></app-table>
+</app-dialog>
+
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'perfil'"
+  title="Solicitudes de {{ mascota?.name }}"
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="submitDelete()"
+  [width]="'900px'"
+  [maxHeight]="'80vh'"
+  [button]="false"
+>
+  <app-profile [userProfile]="userProperty"></app-profile>
+</app-dialog>
+
+<app-dialog
+  *ngIf="showDialog && tipeDialog === 'delete-animal'"
+  title="Eliminar a {{ mascota?.name }}"
+  (close)="showDialog = false"
+  [submitDisabled]="false"
+  (confirm)="submitDelete()"
+  [width]="'600px'"
+  [maxHeight]="'80vh'"
+>
+  <app-dilog-confirmacion
+    title="¿Estás seguro?"
+    message="Esta acción no se puede deshacer. ¿Quieres continuar?"
+  ></app-dilog-confirmacion>
+</app-dialog>

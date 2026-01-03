@@ -1,0 +1,186 @@
+<div class="bg-white  border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Header principal -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 gap-4">
+
+      <!-- Lado izquierdo: Volver + Información -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+
+        <!-- Volver -->
+        <button
+          (click)="volver()"
+          class="flex items-center text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+        >
+          <span class="material-symbols-rounded text-xl sm:text-base">arrow_back_ios_new</span>
+          <span class="ml-2 text-sm sm:text-base">Volver</span>
+        </button>
+
+        <!-- Separador - solo visible en desktop -->
+        <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
+
+        <!-- Información principal user -->
+        <div class="w-full sm:w-auto">
+          <div class="flex items-center">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 flex items-center">
+              <span class="material-symbols-rounded text-orange-500 mr-2 text-lg sm:text-xl">person</span>
+              <span class="truncate max-w-[200px] sm:max-w-none">{{ userLogin?.username }}</span>
+            </h1>
+            <!-- Indicador móvil de ID -->
+            <span class="ml-2 sm:hidden text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+              ID: {{ userLogin?.id }}
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1 hidden sm:block">
+            {{ userLogin?.email }} • ID: {{ userLogin?.id }}
+          </p>
+          <!-- Email en móvil -->
+          <p class="text-xs text-gray-500 mt-1 sm:hidden truncate">
+            {{ userLogin?.email }}
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Acciones - Lado derecho -->
+      <div class="flex items-center justify-between sm:justify-normal space-x-2 sm:space-x-3 w-full sm:w-auto">
+
+        <!-- Botón menú móvil para tabs -->
+        <button
+          *ngIf="tabs.length > 0"
+          (click)="toggleMobileTabsMenu()"
+          class="sm:hidden flex items-center text-gray-600 hover:text-gray-900 px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium transition cursor-pointer"
+        >
+          <span class="material-symbols-rounded text-lg mr-2">menu</span>
+          Menú
+        </button>
+
+        <!-- Acciones principales -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <!-- Editar -->
+          <button
+            class="px-3 sm:px-4 py-2 border border-gray-200 hover:bg-gray-100 rounded-lg text-sm font-medium transition cursor-pointer flex items-center"
+            (click)="openAdoptionModal('edit')"
+            title="Editar perfil"
+          >
+            <span class="material-symbols-rounded text-lg sm:mr-2">edit_square</span>
+            <span class="hidden sm:inline">Editar</span>
+          </button>
+
+          <!-- Logout -->
+          <button
+            class="px-3 py-2 border border-gray-200 hover:bg-gray-100 rounded-lg text-sm font-medium transition cursor-pointer"
+            (click)="openAdoptionModal('logout')"
+            title="Cerrar sesión"
+          >
+            <span class="material-symbols-rounded text-lg">logout</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tabs - Desktop -->
+    <div class="hidden sm:block border-t border-gray-200   border-t border-gray-100">
+      <nav class="-mb-px flex overflow-x-auto py-1">
+        <button
+          *ngFor="let tab of tabs"
+          (click)="sendTabActiva(tab.id)"
+          class="whitespace-nowrap py-4 px-2 sm:px-3 lg:px-4 border-b-2 font-medium text-sm flex items-center transition-colors cursor-pointer min-w-max"
+          [class]="
+            tabActiva === tab.id
+              ? 'border-orange-400 text-orange-500'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          "
+        >
+          <span class="material-symbols-rounded text-lg mr-2">
+            {{ tab.icon }}
+          </span>
+
+          <span class="hidden md:inline">{{ tab.name }}</span>
+          <span class="md:hidden">{{ tab.shortName || tab.name }}</span>
+
+          <span
+            *ngIf="tab.count > 0"
+            class="ml-2 inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 text-xs font-semibold rounded-full bg-orange-500 text-white"
+          >
+            {{ tab.count > 99 ? '99+' : tab.count }}
+          </span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Tabs - Mobile (Dropdown) -->
+    <div
+      *ngIf="tabs.length > 0"
+      class="sm:hidden border-t border-gray-200 transition-all duration-300 overflow-hidden"
+      [class.max-h-0]="!isMobileTabsMenuOpen"
+      [class.max-h-96]="isMobileTabsMenuOpen"
+    >
+      <div class="py-2 px-1">
+        <div class="space-y-1">
+          <div
+            *ngFor="let tab of tabs"
+            (click)="selectTabMobile(tab.id)"
+            class="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer transition-colors"
+            [class.bg-orange-50]="tabActiva === tab.id"
+            [class.text-orange-600]="tabActiva === tab.id"
+            [class.text-gray-700]="tabActiva !== tab.id"
+            [class.hover:bg-gray-50]="tabActiva !== tab.id"
+          >
+            <div class="flex items-center">
+              <span class="material-symbols-rounded text-lg mr-3">
+                {{ tab.icon }}
+              </span>
+              <span class="font-medium">{{ tab.name }}</span>
+            </div>
+
+            <div class="flex items-center">
+              <span
+                *ngIf="tab.count > 0"
+                class="ml-2 inline-flex items-center justify-center min-w-6 h-6 px-2 text-xs font-semibold rounded-full bg-orange-500 text-white"
+              >
+                {{ tab.count > 99 ? '99+' : tab.count }}
+              </span>
+              <span
+                *ngIf="tabActiva === tab.id"
+                class="material-symbols-rounded text-orange-500 ml-2"
+              >
+                check
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador de tab activa en móvil -->
+    <div *ngIf="tabs.length > 0" class="sm:hidden border-t border-gray-200 py-3 px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="material-symbols-rounded text-orange-500 mr-2">
+            {{ getActiveTabIcon() }}
+          </span>
+          <span class="font-medium text-gray-900">
+            {{ getActiveTabName() }}
+          </span>
+          <span
+            *ngIf="getActiveTabCount() > 0"
+            class="ml-2 inline-flex items-center justify-center w-6 h-6 text-xs font-semibold rounded-full bg-orange-500 text-white"
+          >
+            {{ getActiveTabCount() > 99 ? '99+' : getActiveTabCount() }}
+          </span>
+        </div>
+        <button
+          (click)="toggleMobileTabsMenu()"
+          class="text-gray-500 hover:text-gray-700"
+        >
+          <span class="material-symbols-rounded">
+            {{ isMobileTabsMenuOpen ? 'expand_less' : 'expand_more' }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

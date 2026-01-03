@@ -1,0 +1,418 @@
+<!-- Spinner -->
+<app-preload [spinner]="spinner"></app-preload>
+
+<div class="min-h-screen">
+  <!-- Header -->
+  <app-nadvar-animal
+    [mascota]="mascota"
+    [userLogin]="userLogin"
+    [isSolicited]="isSolicited"
+    [requests]="requests"
+    (accionEmitter)="showDialog = true && (tipeDialog = $event)"
+  ></app-nadvar-animal>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+    <!-- ======================== GRID 2 COLUMNAS ======================== -->
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- ======================== COLUMNA IZQUIERDA (2 SPAN) ======================== -->
+      <div class="lg:col-span-2 space-y-4">
+        <!-- ======================== GALERÍA (FULL WIDTH) ======================== -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <!-- Título -->
+          <div
+            class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+          >
+            <h2 class="text-lg font-semibold text-gray-900">
+              Galería de Imágenes
+            </h2>
+            <span class="text-sm text-gray-500"
+              >{{ mascota?.images?.length || 0 }} imágenes</span
+            >
+          </div>
+
+          <!-- Visor principal -->
+          <div
+            *ngIf="imgPet"
+            class="w-full px-4 sm:px-6 md:px-6 py-4 flex justify-center"
+          >
+            <div
+              class="w-full max-w-[700px] h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden"
+            >
+              <img
+                [src]="imgPet"
+                class="max-w-full max-h-full rounded-lg"
+                alt="Imagen seleccionada"
+              />
+            </div>
+          </div>
+
+          <!-- Miniaturas -->
+          <div class="px-4 sm:px-6 md:px-6 py-4 flex justify-center">
+            <div class="flex flex-wrap justify-center gap-2">
+              <div
+                *ngFor="let imagen of mascota?.images; let i = index"
+                class="w-24 aspect-square rounded-lg border-2 overflow-hidden bg-white cursor-pointer transition-all duration-200"
+                [class.border-orange-500]="imgPet === imagen"
+                [class.border-gray-200]="imgPet !== imagen"
+                (click)="imgPet = imagen"
+              >
+                <img
+                  [src]="imagen"
+                  class="w-full h-full object-cover"
+                  [alt]="'Imagen ' + (i + 1)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">
+              Descripción y Comportamiento
+            </h2>
+          </div>
+
+          <div class="px-6 py-4 space-y-6">
+            <div>
+              <label class="text-sm font-medium text-gray-500"
+                >Descripción</label
+              >
+              <p class="text-gray-900 whitespace-pre-line">
+                {{ mascota?.description || "Sin descripción" }}
+              </p>
+            </div>
+
+            <div>
+              <label class="text-sm font-medium text-gray-500"
+                >Temperamento</label
+              >
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span
+                  *ngFor="let temp of mascota?.temperament"
+                  class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800"
+                >
+                  {{ temp }}
+                </span>
+                <span
+                  *ngIf="
+                    !mascota?.temperament || mascota?.temperament.length === 0
+                  "
+                  class="text-gray-400 text-sm"
+                >
+                  No especificado
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================== SIDEBAR ======================== -->
+      <div class="space-y-4">
+        <!-- Información principal -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-200"
+          *ngIf="userLogin"
+        >
+          <div class="px-6 py-4 flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-gray-900">Distancia</h2>
+            <span
+              class="inline-flex items-center rounded-full text-lg font-semibold text-orange-400"
+            >
+              {{ mascota?.distance }} Km
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div
+            class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+          >
+            <h2 class="text-lg font-semibold text-gray-900">
+              Información Principal
+            </h2>
+            <div
+                class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
+                [ngClass]="{
+                      'text-orange-400 border-orange-400':
+                        mascota.status === 'En adopción' || mascota.status === 'Pendiente',
+                      'bg-gradient-to-r from-green-50 to-emerald-50 text-emerald-700 border-emerald-200':
+                        mascota.status === 'Adoptado',
+                    }"
+                  >
+                    <span
+                      class="w-2 h-2 rounded-full"
+                      [ngClass]="{
+                        'bg-orange-500 ': mascota.status === 'En adopción' || mascota.status === 'Pendiente',
+                        'bg-green-500': mascota.status === 'Adoptado',
+                      }"
+                    ></span>
+                {{ mascota.status }}
+              </div>
+          </div>
+
+          <div class="px-6 py-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Columna 1 -->
+              <div class="space-y-1">
+                <div>
+                  <label class="text-sm font-medium text-gray-500"
+                    >Nombre</label
+                  >
+                  <p class="text-gray-900">{{ mascota?.name | titlecase }}</p>
+                </div>
+
+                <div>
+                  <label class="text-sm font-medium text-gray-500"
+                    >Especie</label
+                  >
+                  <p class="text-gray-900">{{ mascota?.specie | titlecase }}</p>
+                </div>
+
+                <div>
+                  <label class="text-sm font-medium text-gray-500">Raza</label>
+                  <p class="text-gray-900">{{ mascota?.breed | titlecase }}</p>
+                </div>
+              </div>
+
+              <!-- Columna 2 -->
+              <div class="space-y-1">
+                <div>
+                  <label class="text-sm font-medium text-gray-500"
+                    >Tamaño</label
+                  >
+                  <p class="text-gray-900">{{ mascota?.size | titlecase }}</p>
+                </div>
+
+                <div>
+                  <label class="text-sm font-medium text-gray-500"
+                    >Género</label
+                  >
+                  <p class="text-gray-900">
+                    {{ mascota?.sex | titlecase }}
+                  </p>
+                </div>
+
+                <div>
+                  <label class="text-sm font-medium text-gray-500">Edad</label>
+                  <p class="text-gray-900">
+                    {{
+                      mascota?.age > 1
+                        ? mascota?.age + " años"
+                        : mascota?.age + " año"
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-1">
+              <label class="text-sm font-medium text-gray-500">Ubicación</label>
+              <p class="text-gray-900">{{ mascota?.address }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Salud -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Estado de Salud</h2>
+          </div>
+
+          <div class="px-6 py-4 space-y-3">
+            <div
+              *ngFor="let saludItem of saludItems"
+              class="flex justify-between items-center py-2 border-b border-gray-100 last:border-none"
+            >
+              <span class="text-gray-600">{{ saludItem.label }}</span>
+
+              <span
+                [class]="
+                  saludItem.value
+                    ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-emerald-700 border-emerald-200'
+                    : 'text-orange-400 border-orange-400'
+                "
+                class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
+
+              >
+                {{ saludItem.value ? "Sí" : "No" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Responsable -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Responsable</h2>
+          </div>
+
+          <div class="px-6 py-4">
+            <div class="flex items-center space-x-3 mb-4">
+              <img
+                [src]="userProperty?.avatarUrl"
+                class="w-12 h-12 rounded-full object-cover border"
+              />
+              <div>
+                <p class="font-semibold text-gray-900">
+                  {{ userProperty?.username }}
+                </p>
+                <p class="text-sm text-gray-500">{{ userProperty?.email }}</p>
+                <p class="text-xs text-gray-400">{{ userProperty?.phone }}</p>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <button
+                class="w-full flex items-center gap-2 px-3 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
+                (click)="contactarPropietario()"
+              >
+                <span class="material-symbols-rounded text-sm">mail</span>
+                Contactar
+              </button>
+
+              <button
+                class="w-full flex items-center gap-2 px-3 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm cursor-pointer"
+                (click)="verPerfilPropietario()"
+              >
+                <span class="material-symbols-rounded text-sm">person</span>
+                Ver perfil completo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requisitos -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">
+              Requisitos de Adopción
+            </h2>
+          </div>
+
+          <div class="px-6 py-4">
+            <ul class="space-y-2">
+              <li
+                *ngFor="let question of mascota?.questions"
+                class="flex items-start gap-2 text-sm text-gray-700"
+              >
+                <span
+                  class="material-symbols-rounded text-orange-500 text-sm mt-0.5"
+                  >check</span
+                >
+                <span>{{ question }}</span>
+              </li>
+
+              <li
+                *ngIf="!mascota?.questions || mascota?.questions.length === 0"
+                class="text-gray-400 text-sm"
+              >
+                No hay requisitos específicos
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== MODALES ======================== -->
+  <!-- (No se modifican, solo se mantienen ordenados) -->
+
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'request'"
+    title="Solicitud de adopción para {{ mascota?.name }}"
+    [buttonRechazo]="true"
+    (close)="showDialog = false"
+    (confirm)="handleConfirm('request')"
+    (rechazarEmitter)="handleRechazar('request')"
+    [width]="'600px'"
+    [maxHeight]="'80vh'"
+    [submitDisabled]="submitDisabled"
+  >
+    <app-request
+      [animal]="mascota"
+      [answers]="requests"
+      [userLogin]="userLogin"
+      (formEmitter)="formEmitterAndReturn($event)"
+    ></app-request>
+  </app-dialog>
+
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'request-add'"
+    title="Solicitud de adopción para {{ mascota?.name }}"
+    (close)="showDialog = false"
+    (confirm)="handleConfirm('request-add')"
+    [width]="'600px'"
+    [maxHeight]="'80vh'"
+    [submitDisabled]="submitDisabled"
+  >
+    <app-request
+      [animal]="mascota"
+      [answers]="requests"
+      [userLogin]="userLogin"
+      (formEmitter)="formEmitterAndReturn($event)"
+    ></app-request>
+  </app-dialog>
+
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'modify-animal'"
+    title="Editar a {{ mascota?.name }}"
+    (close)="showDialog = false"
+    (confirm)="handleConfirm('modify-animal')"
+    [width]="'1200px'"
+    [maxHeight]="'80vh'"
+    [submitDisabled]="submitDisabled"
+  >
+    <app-add
+      [animalInput]="mascota"
+      [typeForm]="typeForm"
+      (sendAnimalForm)="setDisabledButton($event)"
+    ></app-add>
+  </app-dialog>
+
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'request-list'"
+    title="Solicitudes de {{ mascota?.name }}"
+    (close)="showDialog = false"
+    (confirm)="submitDelete()"
+    [width]="'1200px'"
+    [maxHeight]="'80vh'"
+    [submitDisabled]="submitDisabled"
+  >
+    <app-table
+      *ngIf="!spinner"
+      [items]="requests"
+      [userLogin]="userLogin"
+      (onConfirmEmmiter)="confirmRequest($event)"
+      (onCancelEmmiter)="cancelRequest($event)"
+      (onClickEmmiter)="onClick($event)"
+    ></app-table>
+  </app-dialog>
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'perfil'"
+    title="Solicitudes de {{ mascota?.name }}"
+    (close)="showDialog = false"
+    [submitDisabled]="false"
+    (confirm)="submitDelete()"
+    [width]="'900px'"
+    [maxHeight]="'80vh'"
+    [button]="false"
+  >
+    <app-profile [userProfile]="userProperty"></app-profile>
+  </app-dialog>
+  <app-dialog
+    *ngIf="showDialog && tipeDialog === 'delete-animal'"
+    title="Eliminar a {{ mascota?.name }}"
+    (close)="showDialog = false"
+    (confirm)="submitDelete()"
+    [width]="'600px'"
+    [maxHeight]="'80vh'"
+  >
+    <app-dilog-confirmacion
+      title="¿Estás seguro?"
+      message="Esta acción no se puede deshacer. ¿Quieres continuar?"
+    ></app-dilog-confirmacion>
+  </app-dialog>
+</div>

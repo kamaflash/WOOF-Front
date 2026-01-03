@@ -1,0 +1,399 @@
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+
+  <!-- Fondo futurista -->
+  <div class="fixed inset-0 bg-gray-900">
+    <!-- Grid de puntos -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0); background-size: 40px 40px;"></div>
+
+    <!-- Líneas animadas -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse"></div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-pulse"></div>
+
+    <!-- Elementos de fondo -->
+    <div class="absolute top-1/4 left-10 w-64 h-64 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 right-10 w-80 h-80 bg-gradient-to-bl from-blue-500/5 to-transparent rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div class="relative w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl bg-white/95 backdrop-blur-sm border border-white/10 min-h-[600px]">
+    <div class="flex flex-col lg:flex-row">
+
+      <!-- Panel izquierdo - Imagen -->
+      <div class="lg:w-1/2 bg-gradient-to-br from-gray-900 to-gray-800 p-8 lg:p-12 relative overflow-hidden">
+        <!-- Elementos decorativos -->
+        <div class="absolute -top-16 -left-16 w-32 h-32 bg-orange-500/10 rounded-full"></div>
+        <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-blue-500/10 rounded-full"></div>
+
+        <!-- Logo y branding -->
+        <div class="relative mb-8">
+          <div class="flex items-center space-x-3 mb-6">
+            <img
+              src="https://res.cloudinary.com/dfnywietn/image/upload/v1767195324/w4i7f1bdpsdlkeexrgvk.png"
+              alt="PestMe"
+              class="relative h-10 w-30 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3 drop-shadow-lg"
+            />
+          </div>
+          <h2 class="text-2xl lg:text-3xl font-bold text-white mb-4">
+            Únete a nuestra comunidad
+          </h2>
+          <p class="text-gray-300 max-w-md">
+            Regístrate y conecta con animales que buscan un hogar.
+Adopta con información, acompañamiento y responsabilidad.
+          </p>
+        </div>
+
+        <!-- Características -->
+        <div class="relative space-y-4 mt-8">
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-300">Haz match para conocer a tu futuro compañero</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-300">Busqueda de un nuevo hogar</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-300">Participa y colabora con entidades o protectoras</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel derecho - Formulario -->
+      <div class="lg:w-1/2 bg-white p-6 lg:p-10 flex items-center">
+        <div class="w-full max-w-md mx-auto">
+
+          <!-- Header del formulario -->
+          <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Crear Cuenta</h2>
+            <p class="text-gray-500 text-sm">Completa tus datos para registrarte</p>
+          </div>
+
+          <!-- Formulario principal -->
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5" *ngIf="!isSend">
+
+            <!-- Tipo de cuenta -->
+            <div class="space-y-3">
+              <label class="text-gray-700 font-medium text-sm">
+                Tipo de cuenta
+              </label>
+              <div class="flex gap-4">
+                <label class="flex-1 cursor-pointer">
+                  <input type="radio" formControlName="accountType" value="user" class="sr-only peer" />
+                  <div class="p-4 border-2 border-gray-200 rounded-xl text-center transition-all duration-300 peer-checked:border-orange-500 peer-checked:bg-orange-50">
+                    <div class="w-8 h-8 mx-auto mb-2 rounded-full bg-orange-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Usuario</span>
+                  </div>
+                </label>
+                <label class="flex-1 cursor-pointer">
+                  <input type="radio" formControlName="accountType" value="shelter" class="sr-only peer" />
+                  <div class="p-4 border-2 border-gray-200 rounded-xl text-center transition-all duration-300 peer-checked:border-orange-500 peer-checked:bg-orange-50">
+                    <div class="w-8 h-8 mx-auto mb-2 rounded-full bg-orange-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2h1v6a1 1 0 001 1h2a1 1 0 001-1v-6h1a2 2 0 002-2V6a2 2 0 00-2-2H4z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Protectora</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Campos dinámicos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+              <!-- Usuario/Nombre protectora -->
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  {{ registerForm.get('accountType')?.value !== 'shelter' ? 'Nombre de usuario' : 'Nombre de la protectora' }}
+                </label>
+                <div class="relative">
+                  <input
+                    type="text"
+                    formControlName="username"
+                    placeholder="Ingresa tu nombre"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                    [ngClass]="{
+                      'border-green-500 focus:ring-green-500/30': registerForm.get('username')?.valid && registerForm.get('username')?.dirty,
+                      'border-red-500 focus:ring-red-500/30': registerForm.get('username')?.invalid && registerForm.get('username')?.dirty
+                    }"
+                  />
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <svg *ngIf="registerForm.get('username')?.valid && registerForm.get('username')?.dirty" class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.dirty" class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="email"
+                    formControlName="email"
+                    placeholder="tu@email.com"
+                    class="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                    [ngClass]="{
+                      'border-green-500 focus:ring-green-500/30': registerForm.get('email')?.valid && registerForm.get('email')?.dirty,
+                      'border-red-500 focus:ring-red-500/30': registerForm.get('email')?.invalid && registerForm.get('email')?.dirty
+                    }"
+                  />
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <svg *ngIf="registerForm.get('email')?.valid && registerForm.get('email')?.dirty" class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.dirty" class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campos específicos para usuario -->
+              <div *ngIf="registerForm.get('accountType')?.value !== 'shelter'" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                  <input
+                    type="text"
+                    formControlName="name"
+                    placeholder="Tu nombre"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">Apellidos</label>
+                  <input
+                    type="text"
+                    formControlName="lastname"
+                    placeholder="Tus apellidos"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+              </div>
+
+              <!-- Campos específicos para protectora -->
+              <div *ngIf="registerForm.get('accountType')?.value === 'shelter'" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">CIF</label>
+                  <input
+                    type="text"
+                    formControlName="cif"
+                    placeholder="CIF de la protectora"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">Página web</label>
+                  <input
+                    type="text"
+                    formControlName="website"
+                    placeholder="https://ejemplo.com"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+              </div>
+
+              <!-- Teléfono -->
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="tel"
+                    formControlName="phone"
+                    placeholder="+34 123 456 789"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+              </div>
+
+              <!-- Dirección -->
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Dirección</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    #direccionInput
+                    formControlName="address"
+                    [value]="registerForm.get('address')?.value?.text || ''"
+                    placeholder="Tu dirección completa"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                  />
+                </div>
+              </div>
+
+              <!-- Tipo de vivienda (solo usuarios) -->
+              <div *ngIf="registerForm.get('accountType')?.value !== 'shelter'" class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Tipo de vivienda</label>
+                <select
+                  formControlName="houseType"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300"
+                >
+                  <option [value]="home.value" *ngFor="let home of tipeHome">
+                    {{ home.label }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Checkboxes para usuarios -->
+              <div *ngIf="registerForm.get('accountType')?.value !== 'shelter'" class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Características del hogar</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-all duration-300">
+                    <input type="checkbox" formControlName="hasGarden" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500 cursor-pointer" />
+                    <span class="text-sm text-gray-700">Jardín</span>
+                  </label>
+                  <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-all duration-300">
+                    <input type="checkbox" formControlName="hasKids" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500 cursor-pointer" />
+                    <span class="text-sm text-gray-700">Niños</span>
+                  </label>
+                  <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-all duration-300">
+                    <input type="checkbox" formControlName="hasOtherPets" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500 cursor-pointer" />
+                    <span class="text-sm text-gray-700">Otras mascotas</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón de registro -->
+            <button
+              type="submit"
+              [disabled]="registerForm.invalid || spinner"
+              class="w-full flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-4 py-3.5 rounded-xl text-sm transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] mt-6"
+            >
+              <svg
+                *ngIf="spinner"
+                class="animate-spin h-5 w-5 text-white mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+
+              <span *ngIf="!spinner" class="flex items-center">
+                Crear cuenta
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+              </span>
+              <span *ngIf="spinner">Creando cuenta...</span>
+            </button>
+          </form>
+
+          <!-- Mensaje de éxito -->
+          <div *ngIf="isSend" class="text-center py-8">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-green-100 to-green-50 flex items-center justify-center">
+              <svg class="w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">¡Registro completado!</h3>
+
+            <p class="text-gray-600 mb-6">
+              Hemos enviado un email de confirmación a
+              <strong class="text-orange-500">{{ registerForm.get("email")?.value }}</strong>
+            </p>
+
+            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 mb-6 text-left">
+              <div class="flex items-start">
+                <svg class="w-5 h-5 text-orange-500 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                </svg>
+                <div>
+                  <p class="text-sm text-gray-700 font-medium mb-1">
+                    Sigue estos pasos:
+                  </p>
+                  <ul class="text-xs text-gray-600 space-y-1">
+                    <li class="flex items-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></span>
+                      Busca el email de <strong>AppPro</strong>
+                    </li>
+                    <li class="flex items-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></span>
+                      Haz clic en el botón "Activar mi cuenta"
+                    </li>
+                    <li class="flex items-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></span>
+                      ¡Empieza a usar la plataforma!
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs text-gray-500">
+              <p>
+                ¿No ves el email? Revisa también tu carpeta de
+                <strong>spam</strong> o <strong>correo no deseado</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Enlace a login -->
+          <div class="text-center pt-6 border-t border-gray-200 mt-6">
+            <p class="text-gray-600 text-sm">
+              ¿Ya tienes una cuenta?
+              <a
+                href="/login"
+                class="font-semibold text-orange-500 hover:text-orange-600 transition-colors ml-1"
+              >
+                Inicia sesión
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

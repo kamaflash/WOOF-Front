@@ -1,0 +1,315 @@
+<div class="min-h-screen bg-white p-4 md:p-8">
+
+  <!-- Contenedor principal -->
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header simplificado -->
+    <div class="mb-10 md:mb-12">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+              <span class="material-symbols-rounded text-gray-600 text-2xl">settings</span>
+            </div>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-semibold text-gray-900">
+                Configuración
+              </h1>
+              <p class="text-gray-500 mt-1">
+                Gestiona tus preferencias y privacidad
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón guardar -->
+        <button
+          class="px-6 py-3 bg-orange-400 hover:bg-orange-500 text-white rounded-xl font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          (click)="saveSettings()"
+          [disabled]="!hasUnsavedChanges"
+        >
+          Guardar cambios
+        </button>
+      </div>
+
+      <!-- Indicador de cambios -->
+      <div *ngIf="hasUnsavedChanges" class="mt-6 max-w-xl">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700">Cambios pendientes</span>
+          <span class="text-sm font-semibold text-orange-400">{{ unsavedChangesCount }} modificaciones</span>
+        </div>
+        <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div class="h-full bg-orange-400 rounded-full transition-all duration-300"
+               [style.width]="getCompletionPercentage() + '%'"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout principal -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- Navegación lateral minimalista -->
+      <div class="lg:col-span-1">
+        <div class="bg-gray-50 rounded-xl p-4 sticky top-8">
+          <!-- Buscador -->
+          <div class="relative mb-6">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="material-symbols-rounded text-gray-400">search</span>
+            </div>
+            <input
+              type="text"
+              placeholder="Buscar ajustes..."
+              class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+              (input)="filterSections($event)"
+            />
+          </div>
+
+          <!-- Secciones de navegación -->
+          <nav class="space-y-1">
+            <div *ngFor="let section of filteredSections" class="relative">
+              <button
+                (click)="scrollToSection(section.id)"
+                class="w-full text-left px-3 py-3 rounded-lg flex items-center gap-3 transition-colors duration-200 cursor-pointer"
+                [class]="activeSection === section.id
+                  ? 'bg-white text-orange-400 shadow-sm'
+                  : 'text-gray-700 hover:bg-gray-100'"
+              >
+                <span class="material-symbols-rounded text-lg">
+                  {{ section.icon }}
+                </span>
+                <span class="font-medium">{{ section.label }}</span>
+                <span class="ml-auto text-xs text-gray-500">{{ section.count }}</span>
+              </button>
+            </div>
+          </nav>
+
+          <!-- Acciones rápidas -->
+          <div class="border-t border-gray-200 pt-6 mt-6">
+            <h4 class="font-medium text-gray-700 text-sm mb-3">Acciones rápidas</h4>
+            <div class="space-y-2">
+              <button
+                (click)="enableAllNotifications()"
+                class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              >
+                <span class="material-symbols-rounded text-lg text-orange-500">notifications</span>
+                Activar notificaciones
+              </button>
+              <button
+                (click)="resetToDefaults()"
+                class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              >
+                <span class="material-symbols-rounded text-lg text-gray-500">restart_alt</span>
+                Restablecer predeterminados
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="lg:col-span-3 space-y-8">
+
+        <!-- Sección 1: Cuenta -->
+
+
+        <!-- Sección 2: Privacidad -->
+        <section id="privacy" class="scroll-mt-24">
+          <div class="bg-white border border-gray-200 rounded-xl">
+            <!-- Header de sección -->
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-3">
+                <span class="material-symbols-rounded text-green-500">lock</span>
+                Privacidad
+              </h2>
+              <p class="text-gray-500 text-sm mt-1">
+                Controla quién puede ver tu información y actividad
+              </p>
+            </div>
+
+            <!-- Contenido -->
+            <div class="p-6 space-y-6">
+              <div *ngFor="let option of privacyOptions"
+                   class="flex items-center justify-between py-4 border-b border-gray-100 last:border-0">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-1">
+                    <span class="material-symbols-rounded text-gray-500">{{ option.icon }}</span>
+                    <h3 class="font-medium text-gray-900">{{ option.label }}</h3>
+                  </div>
+                  <p class="text-gray-500 text-sm">{{ option.description }}</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="option.enabled"
+                    (change)="onSettingChange()"
+                    class="sr-only peer"
+                  >
+                  <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-400"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 3: Notificaciones -->
+        <section id="notifications" class="scroll-mt-24">
+          <div class="bg-white border border-gray-200 rounded-xl">
+            <!-- Header de sección -->
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-3">
+                <span class="material-symbols-rounded text-purple-500">notifications</span>
+                Notificaciones
+              </h2>
+              <p class="text-gray-500 text-sm mt-1">
+                Gestiona cómo y cuándo recibes notificaciones
+              </p>
+            </div>
+
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="space-y-6">
+                <!-- Tipo de notificaciones -->
+                <div>
+                  <h3 class="font-medium text-gray-900 mb-4">Tipo de notificaciones</h3>
+                  <div class="space-y-4">
+                    <div *ngFor="let notif of emailNotifications"
+                         class="flex items-center justify-between">
+                      <div>
+                        <h4 class="font-medium text-gray-900 text-sm">{{ notif.label }}</h4>
+                        <p class="text-gray-500 text-xs">{{ notif.description }}</p>
+                      </div>
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="notif.enabled"
+                          (change)="onSettingChange()"
+                          class="sr-only peer"
+                        >
+                        <div class="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-400"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Frecuencia -->
+                <div class="pt-6 border-t border-gray-200">
+                  <h3 class="font-medium text-gray-900 mb-4">Frecuencia</h3>
+                  <div class="space-y-3">
+                    <label *ngFor="let freq of notificationFrequencies"
+                           class="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="radio"
+                        [value]="freq.value"
+                        [(ngModel)]="settings.notifications.frequency"
+                        (change)="onSettingChange()"
+                        class="text-orange-400 focus:ring-orange-500"
+                      />
+                      <div class="flex-1">
+                        <h4 class="font-medium text-gray-900 text-sm">{{ freq.label }}</h4>
+                        <p class="text-gray-500 text-xs">{{ freq.description }}</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 4: Preferencias de adopción -->
+        <section id="adoption" class="scroll-mt-24">
+          <div class="bg-white border border-gray-200 rounded-xl">
+            <!-- Header de sección -->
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-3">
+                <span class="material-symbols-rounded text-orange-500">pets</span>
+                Preferencias de adopción
+              </h2>
+              <p class="text-gray-500 text-sm mt-1">
+                Personaliza tus preferencias para encontrar mascotas compatibles
+              </p>
+            </div>
+
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="space-y-6">
+                <!-- Especies preferidas -->
+                <div>
+                  <h3 class="font-medium text-gray-900 mb-4">Especies que prefieres</h3>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <label *ngFor="let pet of petPreferences"
+                           class="flex flex-col items-center p-4 border border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 cursor-pointer transition-colors duration-200">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="pet.selected"
+                        (change)="onSettingChange()"
+                        class="sr-only"
+                      />
+                      <div class="text-3xl mb-2">{{ pet.emoji }}</div>
+                      <div class="font-medium text-gray-900 text-sm">{{ pet.label }}</div>
+                      <div class="text-gray-500 text-xs mt-1">{{ pet.count }} disponibles</div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Filtros avanzados -->
+                <div class="pt-6 border-t border-gray-200">
+                  <h3 class="font-medium text-gray-900 mb-6">Filtros de compatibilidad</h3>
+                  <div class="space-y-6">
+                    <div *ngFor="let filter of advancedFilters">
+                      <div class="flex items-center justify-between mb-3">
+                        <label class="font-medium text-gray-900 text-sm">{{ filter.label }}</label>
+                        <span class="text-sm text-orange-400">{{ getFilterValue(filter) }} {{ filter.unit }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        [(ngModel)]="filter.value"
+                        [min]="filter.range.min"
+                        [max]="filter.range.max"
+                        (input)="onSettingChange()"
+                        class="w-full h-1.5 bg-gray-300 rounded-lg appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-orange-400"
+                      />
+                      <div class="flex justify-between text-xs text-gray-500 mt-2">
+                        <span>{{ filter.range.min }} {{ filter.unit }}</span>
+                        <span>{{ filter.range.max }} {{ filter.unit }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 5: Apariencia -->
+
+        <!-- Footer con botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-between pt-8 border-t border-gray-200">
+          <button
+            (click)="resetToDefaults()"
+            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+          >
+            Restablecer predeterminados
+          </button>
+          <div class="flex gap-4">
+            <button
+              class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              [disabled]="!hasUnsavedChanges"
+            >
+              Descartar cambios
+            </button>
+            <button
+              (click)="saveSettings()"
+              class="px-6 py-3 bg-orange-400 hover:bg-orange-500 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              [disabled]="!hasUnsavedChanges"
+            >
+              Guardar cambios
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

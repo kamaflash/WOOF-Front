@@ -1,0 +1,670 @@
+<app-preload [spinner]="spinner"></app-preload>
+
+<div class="min-h-screen flex flex-col">
+  <app-nadvar-user
+    [userLogin]="userLogin"
+    (accionEmitter)="accion($event)"
+    (tabsEmitter)="setActivationSection($event)"
+  ></app-nadvar-user>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="flex-1 p-4">
+    <!-- Secciones dinámicas -->
+    <section class="space-y-6">
+      <!-- Mascotas -->
+      <div *ngIf="activeSection === 'mascotas'">
+        <div class="rounded-lg p-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-900"></h2>
+            <app-filter-user
+              [items]="statusFilterLabel"
+              (searchChange)="filterChange($event)"
+            ></app-filter-user>
+          </div>
+          <app-gallery
+            [dataSource]="animals"
+            *ngIf="!spinner"
+            [administration]="true"
+            (newItem)="newAnimals()"
+            (onClickEmitter)="admiAnimals($event)"
+            (scrollEmitter)="getDataMorePets(statusFilter)"
+          ></app-gallery>
+        </div>
+        <div class="flex justify-center items-center mb-4" *ngIf="spinnerMini">
+          <div
+            class="w-12 h-12 border-4 border-t-transparent border-[#ff7043] rounded-full animate-spin"
+          ></div>
+        </div>
+      </div>
+      <!-- Match -->
+      <div *ngIf="activeSection === 'match'">
+        <app-match-list></app-match-list>
+      </div>
+      <!-- Solicitudes -->
+      <div *ngIf="activeSection === 'solicitudes'">
+        <div class="p-4">
+          <app-table
+            *ngIf="!spinner"
+            [items]="requests"
+            [columns]="requestColumns"
+            [actions]="requestActions"
+            [filterOptions]="requestFilterOptions"
+            [userLogin]="userLogin"
+            [totalItems]="totalItems"
+            [spinner]="spinnerMini"
+            [searchFields]="['petdto.0.name', 'userdto.0.username', 'userdto.0.email']"
+            [filterField]="'status'"
+            [statusField]="'status'"
+            [userIdField]="'userId'"
+            [enableSearch]="true"
+            [enableFilter]="true"
+            [enableCheckbox]="true"
+            [enableViewToggle]="true"
+            [selectionDisabledStatuses]="['Finalizado', 'Rechazada']"
+            (actionTriggered)="actionRequest($event)"
+            (onClickEmmiter)="onClick($event)"
+            (scrollEmitter)="getDataMoreRequests()"
+          ></app-table>
+        </div>
+        <div class="flex justify-center items-center mb-4" *ngIf="spinnerMini">
+          <div
+            class="w-12 h-12 border-4 border-t-transparent border-[#ff7043] rounded-full animate-spin"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Perfil -->
+      <div *ngIf="activeSection === 'perfil'">
+        <div class="p-4">
+          <app-profile></app-profile>
+        </div>
+      </div>
+
+      <!-- Ajustes -->
+      <div *ngIf="activeSection === 'ajustes'">
+        <app-configuration></app-configuration>
+      </div>
+    </section>
+
+    <!-- Dialog -->
+    <app-dialog
+      *ngIf="
+        showDialog &&
+        (tipeDialog === 'add-animal' ||
+          tipeDialog === 'solicitudes' ||
+          tipeDialog === 'perfil')
+      "
+      (close)="closedDialog()"
+      [button]="tipeDialog === 'solicitudes' ? false : true"
+      [submitDisabled]="submitDisabled"
+      (confirm)="submitConfirm()"
+      (rechazarEmitter)="cancelRequest($event)"
+      [width]="tipeDialog !== 'perfil' ? '1200px' : '800px'"
+      [maxHeight]="'80vh'"
+      [title]="
+        tipeDialog === 'add-animal'
+          ? 'Detalles de adopción'
+          : tipeDialog === 'perfil'
+          ? 'Información del Usuario'
+          : ''
+      "
+    >
+      <app-add
+        *ngIf="tipeDialog === 'add-animal'"
+        (sendAnimalForm)="setDisabledButton($event)"
+        [typeForm]="typeForm"
+        (finishEmitter)="getsData(); activeSection = 'mascotas'"
+      ></app-add>
+
+      <app-requestadd
+        *ngIf="tipeDialog === 'solicitudes'"
+        [req]="requestsClick"
+        [userLogin]="userLogin"
+        (disableButton)="sendDIsableRequest(false)"
+      ></app-requestadd>
+      <div
+        class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"
+        *ngIf="tipeDialog === 'perfil'"
+      >
+        <!-- 🖼️ Columna izquierda: Imagen de perfil -->
+        <div
+          class="lg:col-span-1 flex flex-col items-center bg-white rounded-xl p-6"
+        >
+          <div
+            class="w-40 h-40 rounded-full overflow-hidden border border-orange-400 shadow"
+          >
+            <img
+              [src]="avatar || 'assets/img/default-user.png'"
+              alt="Foto de perfil"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="mt-4">
+            <label
+              for="fileInput"
+              class="cursor-pointer block w-full border border-gray-300 rounded-lg px-3 py-2 text-center hover:bg-gray-100"
+            >
+              Cambiar imagen
+            </label>
+
+            <input
+              id="fileInput"
+              type="file"
+              multiple
+              accept="image/*"
+              class="hidden"
+              (change)="onImagesSelected($event)"
+            />
+          </div>
+        </div>
+
+        <!-- 📝 Columna derecha: Formulario dinámico -->
+        <div class="lg:col-span-2 bg-white rounded-xl p-6">
+          <app-forms-dynamic
+            [formData]="formData"
+            [columns]="2"
+            (submitForm)="setFormValue($event)"
+            (formGroupChange)="onFormGroupChange($event)"
+            [butoms]="false"
+            [spinner]="spinnerButtonm"
+          ></app-forms-dynamic>
+        </div>
+      </div>
+    </app-dialog>
+    <app-dialog
+      *ngIf="showDialog && tipeDialog === 'logout'"
+      title="Salir"
+      (close)="showDialog = false"
+      (confirm)="logout()"
+      [width]="'600px'"
+      [maxHeight]="'80vh'"
+      [submitDisabled]="false"
+    >
+      <app-dilog-confirmacion
+        title="¿Estás seguro?"
+        message="Esta acción no se puede deshacer. ¿Quieres continuar?"
+      ></app-dilog-confirmacion>
+    </app-dialog>
+
+    <app-dialog
+      *ngIf="showDialog && (tipeDialog === 'file' || tipeDialog === 'contac')"
+      title="Salir"
+      (close)="showDialog = false"
+      (confirm)="sendDocuments()"
+      [width]="'800px'"
+      [maxHeight]="'80vh'"
+      [submitDisabled]="false"
+      [button]="userLogin.id === requestsClick.userdto[0].id || requestsClick.status === 'Finalizado'?false:true"
+    >
+      <div *ngIf="tipeDialog === 'file'">
+        <!-- Sección de Documentos -->
+<div class="">
+  <div class="rounded-xl overflow-hidden">
+    <!-- Header de documentos -->
+    <div class=" px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">📋 Documentos Requeridos</h3>
+          <p class="text-sm text-gray-600 mt-1">
+            Documentación necesaria para avanzar con la solicitud
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de documentos -->
+    <div class="divide-y divide-gray-100">
+      <!-- Documento 1: Formulario de adopción -->
+      <div class="p-5 hover:bg-gray-50 transition-colors">
+        <div class="flex items-start gap-4">
+          <!-- Ícono -->
+          <div class="flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+              <span class="material-symbols-rounded text-orange-600">assignment</span>
+            </div>
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="font-medium text-gray-900">Formulario de adopción</h4>
+                <p class="text-sm text-gray-600 mt-1">
+                  Formulario oficial de solicitud de adopción debidamente cumplimentado
+                </p>
+              </div>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                Hecho
+              </span>
+            </div>
+
+            <!-- Detalles adicionales -->
+            <div class="mt-3 p-3 bg-orange-50 rounded-lg">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-rounded text-orange-500 text-sm">info</span>
+                <p class="text-xs text-orange-700">
+                  Debe incluir datos personales, vivienda, experiencia previa con mascotas y referencias
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documento 2: DNI/NIE -->
+      <div class="p-5 hover:bg-gray-50 transition-colors">
+        <div class="flex items-start gap-4">
+          <!-- Ícono -->
+          <div class="flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+              <span class="material-symbols-rounded text-orange-600">badge</span>
+            </div>
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="font-medium text-gray-900">Documento de identificación</h4>
+                <p class="text-sm text-gray-600 mt-1">
+                  Fotocopia del DNI, NIE o pasaporte en vigor
+                </p>
+              </div>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-800" *ngIf="requestsClick.status !=='Pendiente entrega'">
+                Obligatorio
+              </span>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800" *ngIf="requestsClick.status ==='Pendiente entrega'">
+                Hecho
+              </span>
+            </div>
+
+            <!-- Detalles adicionales -->
+            <div class="mt-3 p-3 bg-orange-50 rounded-lg">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-rounded text-orange-500 text-sm">info</span>
+                <p class="text-xs text-orange-700">
+                  Documento debe estar vigente y ser legible. Por ambas caras si aplica.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documento 3: Justificante de domicilio -->
+      <div class="p-5 hover:bg-gray-50 transition-colors">
+        <div class="flex items-start gap-4">
+          <!-- Ícono -->
+          <div class="flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+              <span class="material-symbols-rounded text-orange-600">home</span>
+            </div>
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="font-medium text-gray-900">Justificante de domicilio</h4>
+                <p class="text-sm text-gray-600 mt-1">
+                  Recibo de luz, agua, gas o contrato de alquiler/compra
+                </p>
+              </div>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-800" *ngIf="requestsClick.status !=='Pendiente entrega'">
+                Obligatorio
+              </span>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800" *ngIf="requestsClick.status ==='Pendiente entrega'">
+                Hecho
+              </span>
+            </div>
+
+            <!-- Detalles adicionales -->
+            <div class="mt-3 p-3 bg-orange-50 rounded-lg">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-rounded text-orange-500 text-sm">info</span>
+                <div class="text-xs text-orange-700">
+                  <p class="font-medium">Aceptable:</p>
+                  <ul class="list-disc pl-4 mt-1 space-y-1">
+                    <li>Recibo de suministros (últimos 3 meses)</li>
+                    <li>Contrato de alquiler registrado</li>
+                    <li>Escritura de propiedad</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documento 4: Contrato de adopción -->
+      <div class="p-5 hover:bg-gray-50 transition-colors">
+        <div class="flex items-start gap-4">
+          <!-- Ícono -->
+          <div class="flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+              <span class="material-symbols-rounded text-orange-600">gavel</span>
+            </div>
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="font-medium text-gray-900">Contrato de adopción</h4>
+                <p class="text-sm text-gray-600 mt-1">
+                  Contrato formal proporcionado por la protectora
+                </p>
+              </div>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-800" *ngIf="requestsClick.status !=='Pendiente entrega'">
+                Obligatorio
+              </span>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800" *ngIf="requestsClick.status ==='Pendiente entrega'">
+                Hecho
+              </span>
+            </div>
+
+            <!-- Detalles adicionales -->
+            <div class="mt-3 p-3 bg-orange-50 rounded-lg">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-rounded text-orange-500 text-sm">info</span>
+                <p class="text-xs text-orange-700">
+                  La protectora proporcionará este documento cuando se apruebe la adopción
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pie de sección con instrucciones -->
+    <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0">
+          <span class="material-symbols-rounded text-gray-500">chat</span>
+        </div>
+        <div>
+          <h4 class="text-sm font-medium text-gray-900">📌 Instrucciones para enviar documentos</h4>
+          <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-rounded text-orange-500 text-sm">check_circle</span>
+              <span>Todos los documentos deben ser <strong>escaneados o fotografiados con buena calidad</strong></span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-rounded text-orange-500 text-sm">check_circle</span>
+              <span>Enviar los documentos por <strong>WhatsApp al número proporcionado</strong> arriba</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-rounded text-orange-500 text-sm">check_circle</span>
+              <span>Mantener los documentos originales para posibles verificaciones posteriores</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-rounded text-orange-500 text-sm">check_circle</span>
+              <span>La protectora revisará los documentos y contactará para continuar el proceso</span>
+            </li>
+          </ul>
+
+          <!-- Estado del proceso -->
+          <div class="mt-4 p-3 bg-white border border-gray-200 rounded-lg">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-rounded text-orange-500">schedule</span>
+                <span class="text-sm font-medium text-gray-700">Estado del proceso:</span>
+              </div>
+              <span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                Pendiente de documentación
+              </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+              Una vez enviados todos los documentos, la protectora tendrá un plazo de 3-5 días para revisarlos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+      <div *ngIf="tipeDialog === 'contac'">
+        <div class="p-6">
+          <!-- Header centrado -->
+          <div class="text-center mb-8">
+            <!-- Avatar circular -->
+            <div class="relative inline-block mb-4">
+              <div
+                class="w-60 h-60 rounded-full overflow-hidden border-4 border-white shadow-lg"
+              >
+                <img
+                  [src]="
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.avatarUrl
+                      : requestsClick.userdto[0]?.avatarUrl
+                  "
+                  alt=""
+                  class="w-full h-full object-cover"
+                  onerror="this.src='assets/default-avatar.png'"
+                />
+              </div>
+              <!-- Badge de tipo -->
+              <div
+                class="absolute -bottom-2 left-1/2 transform -translate-x-1/2"
+              >
+                <span
+                  class="px-3 py-1 text-xs font-medium rounded-full bg-white border shadow-sm"
+                  [class]="
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? 'text-orange-600 border-orange-200'
+                      : 'text-orange-600 border-orange-200'
+                  "
+                >
+                  {{
+                    userLogin.id !== requestsClick.userdto[0].id
+                      ? "👤 Solicitante"
+                      : "🏢 Protectora"
+                  }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Nombre y descripción -->
+            <h3 class="text-xl font-bold text-gray-900 mb-1">
+              {{
+                userLogin.id === requestsClick.userdto[0].id
+                  ? requestsClick.userprodto[0]?.username
+                  : requestsClick.userdto[0]?.username
+              }}
+            </h3>
+            <p class="text-gray-600 text-sm max-w-md mx-auto">
+              {{
+                userLogin.id === requestsClick.userdto[0].id
+                  ? requestsClick.userprodto[0]?.description
+                  : requestsClick.userdto[0]?.description
+              }}
+            </p>
+          </div>
+
+          <!-- Información de contacto en dos columnas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- Columna Email -->
+            <div
+              class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-5 hover:border-orange-300 transition-all duration-200"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-orange-100 flex items-center justify-center"
+                  >
+                    <span
+                      class="material-symbols-rounded text-orange-600 text-xl"
+                      >mail</span
+                    >
+                  </div>
+                  <div>
+                    <p class="font-semibold text-gray-900">
+                      Correo electrónico
+                    </p>
+                    <p class="text-xs text-gray-500">Envíale un mensaje</p>
+                  </div>
+                </div>
+                <button
+                  *ngIf="
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.email
+                      : requestsClick.userdto[0]?.email
+                  "
+                  (click)="
+                    copyToClipboard(
+                      userLogin.id === requestsClick.userdto[0].id
+                        ? requestsClick.userprodto[0]?.email
+                        : requestsClick.userdto[0]?.email
+                    )
+                  "
+                  class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Copiar email"
+                >
+                  <span class="material-symbols-rounded text-gray-500"
+                    >content_copy</span
+                  >
+                </button>
+              </div>
+
+              <div class="pl-15">
+                <a
+                  *ngIf="
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.email
+                      : requestsClick.userdto[0]?.email
+                  "
+                  [href]="
+                    'mailto:' +
+                    (userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.email
+                      : requestsClick.userdto[0]?.email)
+                  "
+                  class="block text-orange-600 hover:text-orange-700 font-medium break-all hover:underline"
+                >
+                  {{
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.email
+                      : requestsClick.userdto[0]?.email
+                  }}
+                </a>
+                <p
+                  *ngIf="
+                    !(userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.email
+                      : requestsClick.userdto[0]?.email)
+                  "
+                  class="text-gray-500 italic text-sm"
+                >
+                  Email no disponible
+                </p>
+              </div>
+            </div>
+
+            <!-- Columna Teléfono -->
+            <div
+              class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-5 hover:border-orange-300 transition-all duration-200"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-emerald-100 flex items-center justify-center"
+                  >
+                    <span
+                      class="material-symbols-rounded text-orange-600 text-xl"
+                      >phone</span
+                    >
+                  </div>
+                  <div>
+                    <p class="font-semibold text-gray-900">WhatsApp</p>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button
+                    *ngIf="
+                      userLogin.id === requestsClick.userdto[0].id
+                        ? requestsClick.userprodto[0]?.phone
+                        : requestsClick.userdto[0]?.phone
+                    "
+                    (click)="
+                      copyToClipboard(
+                        userLogin.id === requestsClick.userdto[0].id
+                          ? requestsClick.userprodto[0]?.phone
+                          : requestsClick.userdto[0]?.phone
+                      )
+                    "
+                    class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    title="Copiar teléfono"
+                  >
+                    <span class="material-symbols-rounded text-gray-500"
+                      >content_copy</span
+                    >
+                  </button>
+                  <a
+                    *ngIf="
+                      userLogin.id === requestsClick.userdto[0].id
+                        ? requestsClick.userprodto[0]?.phone
+                        : requestsClick.userdto[0]?.phone
+                    "
+                    target="_blank"
+                    class="p-2 hover:bg-orange-50 rounded-lg transition-colors"
+                    title="Abrir WhatsApp"
+                  >
+                  </a>
+                </div>
+              </div>
+
+              <div class="pl-15">
+                <a
+                  *ngIf="
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.phone
+                      : requestsClick.userdto[0]?.phone
+                  "
+                  class="block text-orange-600 hover:text-orange-700 font-medium hover:underline"
+                >
+                  {{
+                    userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.phone
+                      : requestsClick.userdto[0]?.phone
+                  }}
+                </a>
+                <p
+                  *ngIf="
+                    !(userLogin.id === requestsClick.userdto[0].id
+                      ? requestsClick.userprodto[0]?.phone
+                      : requestsClick.userdto[0]?.phone)
+                  "
+                  class="text-gray-500 italic text-sm"
+                >
+                  Teléfono no disponible
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones principales -->
+
+          <!-- Nota informativa -->
+          <div class="mt-6 pt-4 border-t border-gray-200">
+            <p class="text-xs text-gray-500 text-center">
+              Esta información es para contactar
+              {{
+                userLogin.id !== requestsClick.userdto[0].id
+                  ? "al solicitante"
+                  : "a la protectora"
+              }}
+              sobre la adopción
+              {{
+                userLogin.id !== requestsClick.userdto[0].id
+                  ? ""
+                  : "y avanzar solicitud"
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </app-dialog>
+  </div>
+</div>

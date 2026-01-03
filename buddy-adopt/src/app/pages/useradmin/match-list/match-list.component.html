@@ -1,0 +1,39 @@
+<app-preload [spinner]="spinner"></app-preload>
+
+<!-- Matches usando Tabla -->
+<div class="min-h-screen p-4">
+
+  <!-- Tabla dinámica de matches -->
+  <app-table
+  [items]="matches"
+  [userLogin]="userLogin"
+  [columns]="tableColumns"
+  [actions]="tableActions"
+  [enableSearch]="true"
+  [enableFilter]="true"
+  [enableCheckbox]="false"
+  [enableViewToggle]="true"
+  [searchFields]="['pet.name', 'userdto.0.username']"
+  [filterField]="'status'"
+  [filterOptions]="matchFilters"
+  [defaultFilterStatus]="'Aceptado'"
+  (actionTriggered)="onTableAction($event)"
+  (onClickEmmiter)="onRowClick($event)"
+></app-table>
+
+  <!-- FAB para volver a buscar -->
+  <button
+    *ngIf="matches && matches.length > 0"
+    (click)="goToSwipe()"
+    class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg hover:shadow-xl text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95 cursor-pointer z-10"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M14 5l7 7m0 0l-7 7m7-7H3"
+      />
+    </svg>
+  </button>
+</div>

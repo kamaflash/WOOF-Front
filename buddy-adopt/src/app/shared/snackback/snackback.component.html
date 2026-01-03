@@ -1,0 +1,11 @@
+<div
+  *ngIf="show"
+  class="fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white transition-opacity duration-300"
+  [ngClass]="{
+    'bg-green-500': type === 'success',
+    'bg-red-500': type === 'error',
+    'bg-primary-500-transparent': type === 'info'
+  }"
+>
+  {{ message }}
+</div>
