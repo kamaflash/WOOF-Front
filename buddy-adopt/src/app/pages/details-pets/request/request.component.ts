@@ -76,8 +76,9 @@ export class RequestComponent implements OnInit {
 
   // 🧩 Getter para acceder al FormArray fácilmente desde el template
   get answersArray(): FormArray {
-    return this.form.get('answers') as FormArray;
+    return this.form.get('answers') as FormArray  ?? null;
   }
+
   onFormGroupChange(formGroup: FormGroup) {
     this.dynamicForm = formGroup;
     this.onFormCreated(this.dynamicForm);
