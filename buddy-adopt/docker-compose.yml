@@ -10,7 +10,9 @@ services:
     ports:
       - "4200:80"   # Nginx sirve SPA
     restart: always
-    depends_on:
-      - apigateway_image
+    networks:
+      - buddy-net
 
-
+networks:
+  buddy-net:
+    external: true
