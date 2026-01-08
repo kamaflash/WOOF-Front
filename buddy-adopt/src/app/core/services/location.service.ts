@@ -8,8 +8,6 @@ const endpoint: string = environment.baseUrlSpring;
 })
 export class LocationService {
 
-  private apiKey = 'AIzaSyDMrtuq9gs0KuNFIsjz-bRwfPVs73VJ11M';
-
   constructor(private http: HttpClient) {}
 
   locationDis(dir1: string, dir2: string): Promise<number | null> {

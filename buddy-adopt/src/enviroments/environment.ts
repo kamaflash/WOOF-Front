@@ -7,8 +7,8 @@ export const environment = {
      baseUrl: 'http://localhost:3000/api',
      baseUrlSpring: 'http://localhost:8080/api/',
      baseUrlLogin: 'http://localhost:8088/',
-    socketUrl: 'ws://localhost:3000'
-
+    socketUrl: 'ws://localhost:3000',
+    apiKeyGoogleMaps: 'AIzaSyDMrtuq9gs0KuNFIsjz-bRwfPVs73VJ11M'
   };
 
 
