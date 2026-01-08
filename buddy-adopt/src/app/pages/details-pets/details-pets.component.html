@@ -135,23 +135,23 @@
               Información Principal
             </h2>
             <div
-                class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
-                [ngClass]="{
+              class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
+              [ngClass]="{
                       'text-orange-400 border-orange-400':
                         mascota.status === 'En adopción' || mascota.status === 'Pendiente',
                       'bg-gradient-to-r from-green-50 to-emerald-50 text-emerald-700 border-emerald-200':
                         mascota.status === 'Adoptado',
                     }"
-                  >
-                    <span
-                      class="w-2 h-2 rounded-full"
-                      [ngClass]="{
+            >
+              <span
+                class="w-2 h-2 rounded-full"
+                [ngClass]="{
                         'bg-orange-500 ': mascota.status === 'En adopción' || mascota.status === 'Pendiente',
                         'bg-green-500': mascota.status === 'Adoptado',
                       }"
-                    ></span>
-                {{ mascota.status }}
-              </div>
+              ></span>
+              {{ mascota.status }}
+            </div>
           </div>
 
           <div class="px-6 py-4">
@@ -234,7 +234,6 @@
                     : 'text-orange-400 border-orange-400'
                 "
                 class="px-4 py-1 rounded-full flex items-center gap-2 font-medium text-sm shadow-sm border"
-
               >
                 {{ saludItem.value ? "Sí" : "No" }}
               </span>
@@ -253,6 +252,7 @@
               <img
                 [src]="userProperty?.avatarUrl"
                 class="w-12 h-12 rounded-full object-cover border"
+                alt="pet"
               />
               <div>
                 <p class="font-semibold text-gray-900">
