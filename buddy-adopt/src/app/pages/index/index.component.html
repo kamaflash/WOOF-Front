@@ -5,94 +5,92 @@
 
   <!-- Hero - Estilo consistente -->
   <section
-  class="relative min-h-[40vh] py-16 overflow-hidden mb-14 w-screen -mx-[calc((100vw-100%)/2)]"
->
-  <!-- CAROUSEL -->
-  <div class="absolute inset-0">
-    <ng-container *ngFor="let image of images; let i = index">
-      <img
-        [src]="image"
-        class="absolute inset-0 w-full h-full object-cover transition-all duration-[1200ms] ease-in-out"
-        [class.opacity-0]="currentImage !== i"
-        [class.opacity-100]="currentImage === i"
-        [class.scale-105]="currentImage === i"
-        alt="Animal en adopción"
-      />
-    </ng-container>
-  </div>
+    class="relative min-h-[40vh] py-16 overflow-hidden mb-14 w-screen -mx-[calc((100vw-100%)/2)]"
+  >
+    <!-- CAROUSEL -->
+    <div class="absolute inset-0">
+      <ng-container *ngFor="let image of images; let i = index">
+        <img
+          [src]="image"
+          class="absolute inset-0 w-full h-full object-cover transition-all duration-[1200ms] ease-in-out"
+          [class.opacity-0]="currentImage !== i"
+          [class.opacity-100]="currentImage === i"
+          [class.scale-105]="currentImage === i"
+          alt="Animal en adopción"
+        />
+      </ng-container>
+    </div>
 
-  <!-- OVERLAY principal -->
-  <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10"></div>
+    <!-- OVERLAY principal -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10"
+    ></div>
 
-  <!-- GRADIENTE BLANCO (z-index MENOR que el contenido) -->
-  <div
-    class="absolute bottom-0 left-0 w-full h-200
-           bg-gradient-to-t from-white via-white/20 to-transparent
-           z-0 pointer-events-none"
-  ></div>
-  <!-- CONTENIDO -->
-  <div class="relative z-10 h-full flex items-center">
-    <div class="max-w-7xl mx-auto px-6 w-full">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-14 text-white px-10">
-
-        <!-- COLUMNA IZQUIERDA -->
-        <div>
-          <div
-            class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-sm "
-          >
-            <span class="material-symbols-rounded">pets</span>
-            Adopta de forma responsable
-          </div>
-
-          <h1 class="text-md md:text-xl xl:text-2xl font-semibold leading-tight mb-6 text-[#111927]">
-            Encuentra a tu
-            <span class="block  text-[#111927] font-bold">
-              compañero ideal
-            </span>
-          </h1>
-
-          <p class="text-sm md:text-md  text-[#111927]">
-            Animales reales esperando un hogar definitivo.
-            <span class="block">Haz que su historia empiece contigo.</span>
-          </p>
-        </div>
-
-        <!-- COLUMNA DERECHA -->
-        <div class="flex flex-col justify-center">
-          <div class="flex gap-4 mb-10">
-            <a
-              class="bg-orange-400 hover:bg-orange-500 font-semibold px-8 py-4 rounded-xl transition shadow-lg"
-              routerLink="/match"
+    <!-- GRADIENTE BLANCO (z-index MENOR que el contenido) -->
+    <div
+      class="absolute bottom-0 left-0 w-full h-200 bg-gradient-to-t from-white via-white/20 to-transparent z-0 pointer-events-none"
+    ></div>
+    <!-- CONTENIDO -->
+    <div class="relative z-10 h-full flex items-center">
+      <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-14 text-white px-10">
+          <!-- COLUMNA IZQUIERDA -->
+          <div>
+            <div
+              class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-sm"
             >
-              Haz match!
-            </a>
+              <span class="material-symbols-rounded">pets</span>
+              Adopta de forma responsable
+            </div>
 
-            <a
-              class="bg-white/10 hover:bg-white/20 px-8 py-4 rounded-xl backdrop-blur-md transition"
-              routerLink="/adopt"
+            <h1
+              class="text-md md:text-xl xl:text-2xl font-semibold leading-tight mb-6 text-[#111927]"
             >
-              Cómo funciona
-            </a>
+              Encuentra a tu
+              <span class="block text-[#111927] font-bold">
+                compañero ideal
+              </span>
+            </h1>
+
+            <p class="text-sm md:text-md text-[#111927]">
+              Animales reales esperando un hogar definitivo.
+              <span class="block">Haz que su historia empiece contigo.</span>
+            </p>
           </div>
 
-          <div class="flex gap-10  text-[#111927]">
-            <div>
-              <div class="text-2xl font-bold ">{{ totalAdopted || 1247 }}</div>
-              <div class="text-sm ">Adopciones</div>
+          <!-- COLUMNA DERECHA -->
+          <div class="flex flex-col justify-center">
+            <div class="flex gap-4 mb-10">
+              <a
+                class="bg-orange-400 hover:bg-orange-500 font-semibold px-8 py-4 rounded-xl transition shadow-lg"
+                routerLink="/match"
+              >
+                Haz match!
+              </a>
+
+              <a
+                class="bg-white/10 hover:bg-white/20 px-8 py-4 rounded-xl backdrop-blur-md transition"
+                routerLink="/adopt"
+              >
+                Cómo funciona
+              </a>
             </div>
-            <div>
-              <div class="text-2xl font-bold">{{ totalWaiting || 342 }}</div>
-              <div class="text-sm ">Esperando hogar</div>
+
+            <div class="flex gap-10 text-[#111927]">
+              <div>
+                <div class="text-2xl font-bold">{{ totalAdopted || 1247 }}</div>
+                <div class="text-sm">Adopciones</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold">{{ totalWaiting || 342 }}</div>
+                <div class="text-sm">Esperando hogar</div>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-  </div>
-
-</section>
-
+  </section>
 
   <!-- 🚨 URGENCIAS - Con diseño mejorado -->
   <section class="mb-10" *ngIf="listPetsUrgente.length > 0">
@@ -337,6 +335,7 @@
                 <img
                   [src]="story.beforeImage"
                   class="w-full h-full object-cover"
+                  alt="img"
                 />
               </div>
               <div class="text-xs text-gray-500 mt-2 font-medium">ANTES</div>
@@ -349,6 +348,7 @@
                 <img
                   [src]="story.afterImage"
                   class="w-full h-full object-cover"
+                  alt="img"
                 />
               </div>
               <div class="text-xs text-gray-500 mt-2 font-medium">AHORA</div>
