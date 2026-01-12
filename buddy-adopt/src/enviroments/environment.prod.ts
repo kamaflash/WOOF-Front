@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
-    base_url: 'https://backdefenergy.onrender.com/api'
+    production: true,
+    base_url: 'https://woof-back-sr0d.onrender.com/api',
   };
 
